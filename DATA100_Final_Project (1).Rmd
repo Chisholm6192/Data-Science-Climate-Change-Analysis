@@ -1,0 +1,1844 @@
+---
+title: "DATA100_Final_Project"
+author: "Jean, Ryan, Aryan, Asad, Harshita, Vishal"
+date: "`r Sys.Date()`"
+output: html_document
+---
+## Team Name: R Masters
+
+## Team Members and Student ID:
+
+Last Name      -       First Name  -  Student ID 
+
+Chisholm     -         Ryan     -     ******** 
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(maps)
+library(readr)
+library(purrr)
+```
+
+
+## Introduction  
+
+The industrial revolution was a period of rapid technological growth, from transportation to production and manufacturing. A period filled with conventional energy sources such as coal, gas, and oil. For decades, these energy sources have been effectively used to meet energy demands. 
+
+The recent years have attempted phasing out conventional pollution intensive energy sources to newer alternative energy sources. As many believe that the levels of pollution influence the climate, one visible effect is the change in sea levels.  
+
+Climate Change is best described as the shift in weather patterns and temperatures. Although this is a naturally occurring phenomena, the rate at which it is changing is unprecedented and unnatural, thus giving rise to concern. Climate change is believed to be a result of centuries of human activity. One popular theory is that the sea levels around the world are rising because of climate change. Climate Change is characterized by melting ice caps, rising sea levels, rise in global temperatures, increased chances of drought, reduced rainfall, extreme temperature swings and numerous other effects. An active theory is that as humans burn fossil fuels, extreme amounts of carbon dioxide and other greenhouse gasses are emitted, causing a rise in global temperature, which in turn causes the warming of the Earth and the oceans and resulting in the icecaps melting. This leads to a cascading effect of melted ice caps rendering higher water volume in oceans and causing the mean sea level to rise affecting coastlines across the world. This project aims to find a link between pollution and the rising sea levels; by analyzing the rate of emissions of the most widely used energy sources. 
+
+This led us to our research question: does the rate of emissions since 1980, have a correlation to the rise in sea level?  
+
+An article by the American National Oceanic and Atmospheric Administration (NOAA) about sea levels suggests a similar notion. 
+
+## Article  
+
+Introduction 
+
+One of the impacts of anthropogenic climate change is a rise in the global sea level by melting glaciers and ice caps and a smaller increase from expansion due to the higher temperature of the water. Unlike some other predicted effects of climate change, this impact has already been observed for quite a while. Not only is there evidence that sea levels are rising, but there is also evidence showing that the sea level rise has increased in recent years and that it will continue to increase. The impact of sea level is not experienced equally around the globe; some locations feel a greater rise than others because of local terrain, local hydrological factors, and oceanic currents, among other regional factors. Unfortunately, many large cities are on coastlines, which are especially vulnerable to sea level rises. The expected sea level rises in specific locations can now be mapped in both worst-case and expected-case scenarios thanks to advancements in high-resolution modeling. Positive planning and actions to lessen the impact have resulted from this extremely in-depth awareness of the danger. The article we found provides general recommendations for effective resilience planning for locations that will be affected by this threat, details some solutions that coastal cities around the world are implementing to mitigate risk, and presents the most recent scientific thinking regarding the magnitude of global sea level rise. 
+
+Recently, a team of scientists published a study that found that the rate of sea level rise in the 20th century was greater than it had been in 2,800 years. Sea levels have risen almost 3 inches globally in the most recent 20 years and rise on an average of 1/8 inch each year. In contrast to seawater's thermal expansion, melting land ice is to blame for a greater portion of the global sea level rise in recent decades. 
+
+The current best estimates predict that the sea level will rise to 6.6 feet, or 2 meters, by the year 2100. Until recent years, this figure was viewed as pessimistic, with a rise of 3 feet considered more likely. Recent studies raise the concern that the 6.6-foot estimate is the more probable one with carbon emissions. The West Antarctic Ice Sheet was the subject of earlier research, which did not account for the melting of the Arctic and glaciers. The new research, which was done in the last three years, modeled how warmed seawater would weaken the West Antarctic sheet and accelerate its decline. The study also found that adhering to the agreements in the Paris climate summit of 2015, and thereby keeping the mean global temperature increase under 2°C, would lessen the melting of the West Antarctic Ice Sheet. However, despite this optimistic scenario, there will still be some sea-level rise due to the warming and current levels of greenhouse gases in the atmosphere. One such example is Coastal Resilience in the United States. 
+
+Several coastal cities in America have begun plans to minimize the effects of rising sea levels. Certain areas in Ney York city, which have a 1 percent and 0.2 percent chance of flooding each year, are expected to expand. 
+
+Case Study: New York 
+
+In response to the flood analysis, the city developed a comprehensive resilience plan, and, in this plan, the city specifically analyzed the projected future flood zones and the effects of Sandy as a worst-case impact. For protection against tidal flooding, the city plans to reinforce beaches, build bulkheads, and protect dunes that act as natural barriers. Their plan contains a geological analysis of the landscape and makes specific recommendations based on what types of mitigation strategies the rock and soil in each locale can support. 
+
+Several coastal cities in America have begun plans to minimize the effects of rising sea levels. Certain areas in Ney York city, which have a 1 percent and 0.2 percent chance of flooding each year, are expected to expand. 
+
+Another city that developed a comprehensive climate resilience plan is Boston. Being a coastline city, its greatest risks from climate change are flooding and storm surges. Boston's plan emphasizes community awareness and education as critical tools for taking precautions. It also emphasizes outreaching low-income households, small business owners, and other vulnerable residents since they are the most vulnerable in the events of evacuations. 
+
+Coastal Resilience around the Globe 
+
+Several other cities around the world have begun to address the risks of sea level rise as well. In Australia, coastal cities face threats of tidal flooding, non-tropical storm flooding, and tropical cyclone storm surge just as the cities of the U.S. do. Their strategic plan for climate adaptation and resilience recommends procedures for States and Municipalities. The government of Australia is in the process of developing an online tool, known as Coast Adapt, that will help coastal officials understand the risks their areas face and provide specialized information about reliance measures. The study of Sydney's seawalls serves as a specific illustration of this kind of local resilience planning. The city had several older seawalls, and the authorities were unsure about relying on them during extreme events and oversaw a project to assess the current condition of the revetment, including a strength analysis. Project personnel then made suggestions for improvements to each breakwater surveyed. Many European cities are also vulnerable to rising sea levels. European cities are not threatened by hurricane storm surges because they are located on northern latitudes and tropical cyclone-free coasts but are vulnerable to tidal and non-tropical storm surge flooding. Some are built below sea level and rely on embankments for protection. 
+
+ 
+Lessons and Strategies for Resilience 
+
+As we have seen, it is possible to model the expected risks at an extremely high resolution and perform analyses on existing infrastructure be it natural or synthetic, with a high degree of precision. Climate changes, as we know, do not affect all parts of the Earth in the exact same way. Similarly, the sea level rise will not be globally uniform. Therefore, individualized resilience plans which cater to the needs of each locale are necessary. However, these plans do have some things in common. By analyzing some plans in detail, we recognized that some of the ideas are repetitive in the resilience plans around the globe. And this is because they are applicable, and in many cases, the people who planned this arrived at them through past experiences. So, the cities seeking coastal resilience plans will take references from these repeated ideas for guidance. 
+
+Resilience analysts should also consider the human factor, particularly during extreme flood events that would pose a high threat to life and require partial or full evacuation of the city during emergencies. This type of risk is especially vital for cities that are low lying, prone to storms, or located at the mouths of significant rivers. In such situations officials should come up with a plan which emphasizes educating the community about the threats and giving special attention to the vulnerable part of the population that rely upon public services. 
+
+ 
+Article Conclusion 
+
+Climate change is already causing sea levels worldwide to rise, and we can only expect this trend to continue. Our best, most current science predicts that ice cap melting, and thermal expansion of seawater will produce a combined average rise of up to 6.6 feet by the beginning of the next century. This level of rise would inundate some beaches and overflow many barrier islands that serve as natural protection against storm surges from tropical and non-tropical cyclones. Most expectations say the warming of the planet will proceed and is going to speed up, making the seas continue to rise. As a result, hundreds of coastal cities are at risk of flooding. However, research into predicting how much and when sea levels will rise is still ongoing. 
+
+## The Project  
+
+This section represents the workflow of our project. Our team believes that the best way to tackle any problem is with an analytical mindset, and a top-down approach. The following table represents our workflow. 
+
+1. Loading & Interpretation : Downloading all necessary files, Read the data and get a clear understanding what the data sets convey 
+
+2. Wrangling : Tidying data, Determining what the tidy data should represent (how should the tidy data look), Creating new tables/ datasets using methods learnt in class , Filtering and selecting the necessary data  
+
+3. Analysis : Understanding the story told by the data. 
+
+4. Visualization : Creating visual representations of the data, Observing the trends in the data, Relating the trends to real world events to provide a clearer explanation of the trends.  
+
+5. Conclusion : Explain the findings, Link to article, answer the research question. 
+
+
+Examining the Data 
+
+Dealing with NA’s 
+
+When looking at the data sets, one commonality was the abundance of NA values in all the data sets. This left us at a crossroad: leave the NA values as they are or substitute the NA values. To make this decision, we drew up the pros and cons of the two. Ultimately, we chose to leave the NA values in the original data sets as they represented the real-world lack of data collection. Due to this, we focused our research on the years after 1980. 
+
+Several functions we made were to tidy the data. We made this so that we don’t have to write code to tidy every dataset separately, but rather just do them all at once by using the function. The purpose of one of the functions is to return a list of countries where the data exists. Another function we made does a similar job but compares more types of emissions before returning output. Another function we made was to find if the emission was a production or consumption and return the corresponding value. We made another function that returns the type of usage for the emission (i.e. Import, Export, Consumption, etc.). Overall, all the functions we did were to look over and tidy the data. It checked the data according to the conditions we needed and returned values to help organize the data so it could be easily graphed. 
+
+To tidy this project, for each dataset we created a function to determine whether or not the current entry was a country, we would than use a while loop to run the function again and again until it reached the end of the column, each time it recognized that the entry was indeed a country it would than place that entry into a new column named ‘Region’. Every entry that was identified to not be a country was given an ‘N/A’ value and that value was placed in the new column. The reason we did it this way is because had we put simply nothing in the cells that weren’t countries the length of the ‘Region’ variable would be shorter than the rest which would cause issues, also N/A we put in wasn’t an NA value, it was a string ‘N/A’. Than after this we created another while loop which would run through the entire column and check if the current entry wasn’t ‘N/A’, meaning that it was a country, than check if the entry after it was an ‘N/A’, in which case the entry after would be made equal to the one before, thus converting each N/A string into the matching country name, to have the country running down the entire column rather than only at the start. Then we noticed that there were also non usage values of things like ‘Consumption’ and ‘Production’ at the heads of some chunks of data to signify these were either consumption values or production values. Then we did the same thing we did for regions, we created a new column named ‘Usage’, then created a function to identify each time an entry was a Consumption, Production, Import etc. Then used a while loop to put these entries into their own column and used the same N/A technique as for regions. Finally, we created one more while loop that ran through the entire API column and checked that if the API was an NA value, not N/A string, actual NA (is.na = TRUE), and if it was, we would eliminate(convert to is.na = TRUE) all the other values in that row, because each entry with no API was a row header, things like country name and usage type, which had already been separated, so clearing the entire row made it more tidy and less confusing, and also eliminated all remaining country and usages that were sitting in the ‘Type’ column (the column which actually held the data). After this we had a column named ‘Region’ which has the corresponding country/region for each data chunk running alongside its usage and type of emission. Then we applied this same method for each dataset, the only exception was the emissions dataset as this one had no column names, so we had to manually rename all the columns in the file loading code chunk, we also ran into an error where the Zimbabwe entries were being identified as ‘World’ entries, so we created an if statement fall through to correct that. Then after the tidying was complete, we had to sort and plot the data. To do this we isolated the data to only focus on worldwide totals and production, we had felt that the best way to look at emission and pollution is to look at total global numbers over the years and only focus on amounts produced rather than consumed. So, we filtered to use only ‘World’ and ‘Production’, and then Isolated for each individual API, so basically isolating for each emission type. Then for each API isolated to display only the year columns, we also would like to add that because the vast majority of data before 1980 is empty for all datasets, we decided to focus specifically on the data from the last 40 years, and only used values from 1980 onwards. So now we had the years running along the columns with one data value in each column for the current API being used, than we used pivot_longer() to convert all the years into one column named ‘Year’ and put all the values into one column titled by the dataset and API being used, and then converted all character values to doubles, using mutate_if(). Finally, we plotted them. we plotted the year along the x-axis and the data values along the y-axis, we used a scatter plot and a curved line(geom_smooth) and added + ggtitle() at the end to add a title for each of my plots. After working with all the emissions data, we then worked on the Sea Ice data. After reviewing the excel files we saw that overall, the data didn’t need to be tidied further than it already was, so the only thing we did was rename the first column to Year and dropped the 14th column as it was empty with no column name or anything and filtered the data to only include data after 1980. we also turned each sheet in the sea ice workbook into its own file to make it easier to load the data, so there were excel files for northern extent, southern extent, northern area, southern area, rather than one big excel workbook. Then we plotted the data with the year on the x-axis and the annual variable on the y-axis, this is the average of that year’s extent/area. This was the best way to represent the data, showing the difference in the average of each year over time rather than working with the values of each individual month. we made a scatter plot and smooth curve to show the plots, and added a title, we repeated this for all the sea ice data. 
+
+  
+
+## Bio Fuel
+Biofuel is any fuel that is derived from biomass, that is, plant or algae material, or animal waste. (“Biofuel | Saving Earth | Encyclopedia Britannica”) The two common types of biofuels are ethanol and biomass-based diesel (biodiesel).  
+
+
+```{r include=FALSE}
+#Biofuel file
+BioFuel_file <- "INT-Export-BioFuel-09-09-2022_22-28-53.csv"
+BioFuel_usage <- read_csv(BioFuel_file, skip = 1)
+BioFuel_usage <- BioFuel_usage %>%
+  rename('Type' = 2)
+#Run this entire chunk to reload Dataset
+```
+
+
+```{r include = FALSE}
+#tidying function
+tidying <- function(var){ #pass in the column you are pulling values from as parameter
+  add <- 'N/A' #default entry is N/A
+  if (var != 'Production (Mmt)' & var != 'Fuel ethanol (Mmt)' & var != 'Biomass-based diesel (Mmt)' & var != 'Consumption (Mmt)'){ #if it is not an energy usage type, therefore it is a country
+    add <- var #add the country
+  }
+  return(add)
+}
+
+BioFuel_usage <- mutate(BioFuel_usage, 'Region' = tidying(BioFuel_usage$Type[1])) #create region column
+
+#while loop to call the function and put all the returned country values into Region column
+i <- 1
+while(i < length(BioFuel_usage$Type)){ 
+  BioFuel_usage$Region[i] <- tidying(BioFuel_usage$Type[i])
+  i <- i + 1
+}
+
+#replace empty region entries with the country that is above it, ie the country that is in that section of data
+j <- 1
+while(j < length(BioFuel_usage$Region)){
+  if(BioFuel_usage$Region[j] != 'N/A' & BioFuel_usage$Region[j+1] == 'N/A'){
+    BioFuel_usage$Region[j+1] = BioFuel_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+#Function to sort the entries by Production and Consumption of Emissions
+Usage <- function(var){
+  add <- 'N/A'
+  if (var == 'Production (Mmt)'){
+    add <- 'Production'
+  }
+  else if(var == 'Consumption (Mmt)'){
+    add <- 'Consumption'
+  }
+  return(add)
+}
+
+BioFuel_usage <- mutate(BioFuel_usage, 'Usage' = Usage(BioFuel_usage$Type[1])) #Create the Usage type column
+
+i <- 1
+while (i < length(BioFuel_usage$Type)){
+  BioFuel_usage$Usage[i] = Usage(BioFuel_usage$Type[i])
+  i <- i + 1
+} #sort into columns
+
+j <- 1
+while (j < length(BioFuel_usage$Usage)){
+  if (BioFuel_usage$Usage[j] != 'N/A' & BioFuel_usage$Usage[j+1] == 'N/A'){
+    BioFuel_usage$Usage[j+1] = BioFuel_usage$Usage[j]
+  }
+  j <- j + 1
+}
+#replace unfound values with the entries around it, for usage type
+
+
+#get rid of all countries and usage types still in the main Bio Fuel Type column
+i <- 1
+while (i < length(BioFuel_usage$API)){
+  if (is.na(BioFuel_usage$API[i]) == TRUE){
+    is.na(BioFuel_usage$Region[i]) = TRUE
+    is.na(BioFuel_usage$Usage[i]) = TRUE
+    is.na(BioFuel_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+BioFuel_tidy <- BioFuel_usage %>% #arranging columns
+  select(API, Region, Usage, everything())
+
+BioFuel_tidy
+```
+
+
+```{r include = FALSE}
+BioFuel_tidy <- BioFuel_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+#find only the values for the entire world, and the Production amounts
+
+#Total Bio Fuel Produced
+BioFuel_Production <- BioFuel_tidy %>%
+  filter(API == 'INTL.79-1-WORL-MT.A') #total production API
+
+BioFuel_Production <- BioFuel_Production %>%
+  select('1980':'2019') %>% #only take values from 1980 onwards
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Production') %>% #isolate to just two columns, year and amount produced(production)
+  mutate_if(is.character,as.double) #change all values to double
+
+
+
+#Total Fuel Ethanol Produced
+BioFuel_Ethanol <- BioFuel_tidy %>%
+  filter(API == 'INTL.80-1-WORL-MT.A') #Fuel Ethanol Production API
+  
+BioFuel_Ethanol <- BioFuel_Ethanol %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Ethanol') %>%
+  mutate_if(is.character, as.double)
+
+
+
+#Biomass Based Diesel
+BioFuel_BiomassBasedDiesel <- BioFuel_tidy %>%
+  filter(API == 'INTL.81-1-WORL-MT.A') #Bio Mass Based Diesel Production API
+
+BioFuel_BiomassBasedDiesel <- BioFuel_BiomassBasedDiesel %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Biomass_Based_Diesel') %>%
+  mutate_if(is.character, as.double)
+
+```
+
+Graphical Representation & Analysis of Biofuel
+ 
+```{r}
+ggplot(BioFuel_Production, mapping = aes(Year, Production)) + geom_point() + geom_smooth() +ggtitle('Total Bio Fuel Production - Per Year')
+```
+Biofuel 
+
+There is a gradual increase in the production of biofuel between 1980-85, then plateauing until 1999. A sharp decrease can be observed between the years 1999 and 2000, however with the turn of the century began a rapid rise in the total biofuel production, octupling over the course of 20 years. The biofuel production globally was heavily influenced by the American manufacturing industry. Although first introduced in the early 1900s, biofuel was not efficiently incorporated until 1980. Upon seeing its benefits, the early 200s saw a change in the US energy policy. This resulted in a significant increase in the production of ethanol—from about 1.5 billion gallons to 16 billion gallons in 2018 in America alone. This explains the trend line of an early rise, followed by its saturation, leading to a sudden fall and an exponential inflation. 
+
+
+
+```{r}
+ggplot(BioFuel_Ethanol, mapping = aes(Year, Ethanol)) + geom_point() + geom_smooth() + ggtitle('Total Ethanol Produced - Per Year')
+```
+Ethanol 
+
+Ethanol is an alcohol obtained from sugars and plant starches. It acts as a blending agent with gasoline, increasing octane while also cutting down smog-causing emissions. Conventional gasoline-powered vehicles use E10, a blend containing 10% ethanol and 90% gasoline. Others run on E85 that has 51% - 83% ethanol, depending on the season and geography. It is also used in pharmaceutical preparations, perfumes, and other cosmetics. Ethanol is commonly produced through the process of fermentation where plant sugars are metabolized by plant sugars.  
+
+Production of ethanol from 1980 to 2019 is largely similar to that of biofuel. There is a moderate increase until 1997, after which it drops—first moderately, then drastically—until 2000. 2008 seems to be a mild outlier where the production of ethanol is a little higher than the general trend. 
+
+
+
+```{r}
+ggplot(BioFuel_BiomassBasedDiesel, mapping = aes(Year, Biomass_Based_Diesel)) + geom_point() + geom_smooth() + ggtitle('Biomass Based Diesel Production - Per Year')
+```
+Biodiesel 
+
+Biodiesel is a fossil diesel produced from waste cooking oil, tallow, animal oil and fats and vegetable oil. These components undergo a process called transesterification to produce biodiesel. Biodiesel is the environment friendly option for vehicle fuel as it improves energy security, reduces air pollution, and presents safety benefits. 
+
+Biodiesel has been widely utilised since 2000. Production of biodiesel has seen an upward trend since the beginning of its usage, becoming almost four times its initial production in 2020. This could be a result of the sharp rise in crude oil prices due to the 2000s energy crisis. 
+
+
+## Coal Coke
+This dataset contains the amount of Coal and Coke related combustion substances produced, only data from 1980 onwards is considered.
+
+
+```{r include=FALSE}
+#CoalCoke File
+CC_file <- "INT-Export-CoalCoke-09-09-2022_23-09-12.csv"
+CoalCoke_usage <- read_csv(CC_file, skip = 1)
+CoalCoke_usage <- CoalCoke_usage %>%
+  rename('Type' = 2)
+```
+
+
+```{r include=FALSE}
+#Regions tidying function
+Countries <- function(var){ #pass in the column you are pulling values from as parameter
+  add <- 'N/A' #default entry is N/A
+  if (var != 'Production' & var != 'Coal (Mst)' & var != 'Anthracite (Mst)' & var != 'Metallurgical coal (Mst)' & var != 'Bituminous (Mst)' & var != 'Subbituminous (Mst)' & var != 'Lignite (Mst)' & var != 'Metallurgical coke (Mst)' & var != 'Consumption' & var != 'Imports' & var != 'Exports' & var != 'Reserves' & var != 'Coal (million st)' & var != 'Emissions (MMtonnes CO2)'){ #if it is not an energy usage type, therefore it is a country
+    add <- var #add the country
+    #replace_with_na(replace = var)
+  }
+  return(add)
+}
+
+CoalCoke_usage <- mutate(CoalCoke_usage, 'Region' = Countries(CoalCoke_usage$Type[1]))
+
+i <- 1
+while (i < length(CoalCoke_usage$Type)){
+  CoalCoke_usage$Region[i] <- Countries(CoalCoke_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while(j < length(CoalCoke_usage$Region)){
+  if (CoalCoke_usage$Region[j] != 'N/A' & CoalCoke_usage$Region[j+1] == 'N/A'){
+    CoalCoke_usage$Region[j+1] = CoalCoke_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+#Usage tidying function
+Usage <- function(var){
+  add <- 'N/A'
+  if(var == 'Production' | var == 'Consumption' | var == 'Imports' | var == 'Exports' | var == 'Reserves'){
+    add <- var
+  }
+  return(add)
+}
+
+CoalCoke_usage <- mutate(CoalCoke_usage, 'Usage' = Usage(CoalCoke_usage$Type[1]))
+
+i <- 1
+while(i < length(CoalCoke_usage$Type)){
+  CoalCoke_usage$Usage[i] <- Usage(CoalCoke_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while(j < length(CoalCoke_usage$Usage)){
+  if (CoalCoke_usage$Usage[j] != 'N/A' & CoalCoke_usage$Usage[j+1] == 'N/A'){
+    CoalCoke_usage$Usage[j+1] = CoalCoke_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+
+i <- 1
+while (i < length(CoalCoke_usage$API)){
+  if (is.na(CoalCoke_usage$API[i]) == TRUE){
+    is.na(CoalCoke_usage$Region[i]) = TRUE
+    is.na(CoalCoke_usage$Usage[i]) = TRUE
+    is.na(CoalCoke_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+
+CoalCoke_tidy <- CoalCoke_usage %>%
+  select(API, Region,Usage, everything())
+
+
+
+CoalCoke_tidy
+```
+
+
+```{r include=FALSE}
+CoalCoke_tidy <- CoalCoke_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+#Coal Production
+CoalCoke_Coal <- CoalCoke_tidy %>%
+  filter(API == 'INTL.7-1-WORL-TST.A')
+
+CoalCoke_Coal <- CoalCoke_Coal %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Coal') %>%
+  mutate_if(is.character, as.double)
+
+
+#Anthracite Production
+CoalCoke_Anthracite <- CoalCoke_tidy %>%
+  filter(API == 'INTL.11-1-WORL-TST.A')
+
+CoalCoke_Anthracite <- CoalCoke_Anthracite %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Anthracite') %>%
+  mutate_if(is.character, as.double)
+
+
+
+#Metallurgical Coal Production
+CoalCoke_MetallurgicalCoal <- CoalCoke_tidy %>%
+  filter(API == 'INTL.130-1-WORL-TST.A')
+
+CoalCoke_MetallurgicalCoal <- CoalCoke_MetallurgicalCoal %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Metallurgical_Coal') %>%
+  mutate_if(is.character, as.double)
+
+
+
+#Bituminous Coal Production
+CoalCoke_Bituminous <- CoalCoke_tidy %>%
+  filter(API == 'INTL.12-1-WORL-TST.A')
+
+CoalCoke_Bituminous <- CoalCoke_Bituminous %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Bituminous') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+#Subbituminous Coal Production
+CoalCoke_Subbituminous <- CoalCoke_tidy %>%
+  filter(API == 'INTL.119-1-WORL-TST.A')
+
+CoalCoke_Subbituminous <- CoalCoke_Subbituminous %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Subbituminous') %>%
+  mutate_if(is.character, as.double)
+
+
+
+#Lignite Production
+CoalCoke_Lignite <- CoalCoke_tidy %>%
+  filter(API == 'INTL.14-1-WORL-TST.A')
+
+CoalCoke_Lignite <- CoalCoke_Lignite %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Lignite') %>%
+  mutate_if(is.character, as.double)
+
+
+
+#Metallurgical Coke Production
+CoalCoke_MetallurgicalCoke <- CoalCoke_tidy %>%
+  filter(API == 'INTL.21-1-WORL-TST.A')
+
+CoalCoke_MetallurgicalCoke <- CoalCoke_MetallurgicalCoke %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Metallurgical_Coke') %>%
+  mutate_if(is.character, as.double)
+
+
+```
+
+Graphical Representation & Analysis of Coal & Coke
+  
+```{r}
+ggplot(CoalCoke_Coal, mapping = aes(Year, Coal)) + geom_point() + geom_smooth() + ggtitle('Coal Production - Per Year') 
+```
+Coal 
+
+Coal is a sedimentary rock composed of carbon and hydrocarbons which produce energy when combusted. It is the largest energy source in the world today. There are five major types of coal: anthracite, metallurgical, bituminous, sub-bituminous, lignite. Following the combustion process, a tar-like residue called coke is left behind. This is commonly seen in metallurgical uses.  
+
+
+```{r}
+ggplot(CoalCoke_Anthracite, mapping = aes(Year, Anthracite)) + geom_point() + geom_smooth() + ggtitle('Anthracite Produced - Per Year')
+```
+Anthracite 
+
+The type of coal with the highest ranking is anthracite. It is known to be the highest quality coal as it burns cleanly, producing a trifling amount of soot. It is not used for energy production, but in stoves and furnaces and for other domestic purposes like BBQs and pizza places. Furthermore, it is used in water sanitation. Almost 75% of anthracite is produced in China and the remaining majorly in countries like Russia, Ukraine, Vietnam, and the US (Pennsylvania). 
+
+```{r}
+ggplot(CoalCoke_MetallurgicalCoal, mapping = aes(Year, Metallurgical_Coal)) + geom_point() + geom_smooth() + ggtitle('Metallurgical Coal Produced - Per Year')
+```
+Metallurgical 
+
+Metallurgical coal is used in the production of steel, that is a common part of one’s day-to-day life. It is used in construction, transportation and to make home appliances. In 2015, China’s production of coal fell 3.5% to 3.68 billion tonnes. Its coal industry is suffering from a supply glut, forcing numerous mines to shut down. This was driven by dwindling demand and prompts from authorities to curb the usage of fossil fuels. Since last year, the prices have fallen by 33% as Beijing has authorized producers to control the output and has banned approvals of new projects.  
+
+
+```{r}
+ggplot(CoalCoke_Bituminous, mapping = aes(Year, Bituminous)) + geom_point() + geom_smooth() + ggtitle('Bituminous Coal Produced - Per Year')
+```
+Bituminous  
+
+Bituminous coal is used to produce coal oil in a large scale. Several countries across the globe depend on bituminous coal for production of energy.  
+
+
+```{r}
+ggplot(CoalCoke_MetallurgicalCoke, mapping = aes(Year, Metallurgical_Coke)) + geom_point() + geom_smooth() + ggtitle('Metallurgical Coke Produced - per Year')
+```
+Metallurgical coke 
+
+Destructive distillation of coal in coke ovens produces metallurgical coke. Prepared coal is heated in the absence of oxygen to remove volatile components, leaving behind coke.  
+
+This graph represents the total coal production from 1980 to 2020. The emission levels for coal production rises until 1989 and falls until 1993. One possible explanation could be the disintegration of the economies of the Soviet Union and countries in Eastern Europe. In America, there was a significant fall in coal exports paired with a slower growth of usage of coal for generation of power. The next 20 years saw the surge in the emission levels due to the technological advancements and mass production. Despite this, after 1990, in Europe, coal supply gradually started to fall as energy supply became more prominent through renewable energy. Social consciousness and improvement in the utilization of renewable sources of energy seem to have played a part in the last two years as the production of coal has saturated.  
+
+
+```{r}
+ggplot(CoalCoke_Subbituminous, mapping = aes(Year, Subbituminous)) + geom_point() + geom_smooth() + ggtitle('Subbituminous Coal Produced - Per Year')
+```
+Subbituminous Coal 
+
+Subbituminous coal is known as brown coal or black lignite. It consists of about 42-52% carbon. It has a mild lustre, and exhibits alternating bright and dull maceral bands containing vitrinite. Some subbituminous coal is distinguishable from bituminous coal only microscopically. It is majorly used as fuel for steam-electric power generation. 
+
+From 1980, there is a constant increase until 2008, and while 2009 saw a remarkably similar level of emission, 2010 witnessed a sudden jump. One potential explanation could be the recovering of the global economy post the 2008 financial crash. 2010 could be considered a mild outlier as the following years fall back into the previous trend. In 2020, it seems to have plunged due to the COVID-19 pandemic.  
+
+
+```{r}
+ggplot(CoalCoke_Lignite, mapping = aes(Year, Lignite)) + geom_point() + geom_smooth() + ggtitle('Lignite Produced - Per Year')
+```
+Lignite Coal  
+
+Lignite is the lowest rank of coal. It contains 25-33% carbon and is derived from coal that is over 250 million years old. It is primary used is being combusted to generate electricity.  
+
+The production of lignite over the course of 40 years beginning in 1980 follows an unusually unique trend, unlike the other types of coal. It has peaked twice in the years 1989 and 2012, while witnessing a drastic drop in 1999. The fall was caused because of myriad old factories were retired in the late 1980s. decline from 1990 levels, as more countries shift to low-carbon energy resources such as solar, wind, natural gas, and hydrogen. The decrease in the production of oven coke, used in various industries such as production of iron and steel, also resulted in less hard coal being consumed across the block, according to the Commission. rise from 2000’s due to industrialization in India and China. 
+
+
+## Electricity
+This dataset shows the electricity used and produced each year and what type of energy is being produced or used
+
+“Electricity is a form of energy resulting from the existence of charged particles (such as electrons or protons), either statically as an accumulation of charge or dynamically as a current.” (“Electricity | Energy4me”) The electricity that we use Is a secondary source of energy because, it is created by transforming sources of main energy like coal, natural gas, nuclear energy, solar energy, and wind energy into electrical power. Electricity is also referred to as an energy carrier, which indicates that it can transform itself into other energy types like heat or mechanical energy. 
+```{r include=FALSE}
+#Electricity File
+Electricity_file <- "INT-Export-Electricity-09-09-2022_23-11-57.csv"
+Electricity_usage <- read_csv(Electricity_file, skip = 1)
+Electricity_usage <- Electricity_usage %>%
+  rename('Type' = 2)
+```
+
+
+```{r include=FALSE}
+tidying <- function(var){
+  add <- 'N/A'
+  if (var != 'Generation (billion kWh)' & var != 'Nuclear (billion kWh)' & var != 'Fossil fuels (billion kWh)' & var != 'Renewables (billion kWh)' & var != 'Hydroelectricity (billion kWh)' & var != 'Non-hydroelectric renewables (billion kWh)' & var != 'Geothermal (billion kWh)' & var != 'Solar, tide, wave, fuel cell (billion kWh)' & var != 'Tide and wave (billion kWh)' & var != 'Solar (billion kWh)' & var != 'Wind (billion kWh)' & var != 'Biomass and waste (billion kWh)' & var != 'Hydroelectric pumped storage (billion kWh)' & var != 'Consumption (billion kWh)' & var != 'Imports (billion kWh)' & var != 'Exports (billion kWh)' & var != 'Net imports (billion kWh)' & var != 'Capacity (million kW)' & var != 'Nuclear (million kW)'  & var != 'Fossil fuels (million kW)'  & var != 'Renewables (million kW)'  & var != 'Hydroelectricity (million kW)'  & var != 'Non-hydroelectric renewables (million kW)'  & var != 'Geothermal (million kW)'  & var != 'Solar, tide, wave, fuel cell (million kW)'  & var != 'Tide and wave (million kW)'  & var != 'Solar (million kW)'  & var != 'Wind (million kW)'  & var != 'Biomass and waste (million kW)'  & var != 'Hydroelectric pumped storage (million kW)' & var != 'Distribution losses (billion kWh)'){ #Hardcoding to find whether the value is a Country or not
+    add <- var
+  }
+  return(add)
+}
+
+Electricity_usage <- mutate(Electricity_usage, 'Region' = tidying(Electricity_usage$Type[1]))
+
+i <- 1
+while (i < length(Electricity_usage$Type)){
+  Electricity_usage$Region[i] = tidying(Electricity_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Electricity_usage$Region)){
+  if (Electricity_usage$Region[j] != 'N/A' & Electricity_usage$Region[j+1] == 'N/A'){
+    Electricity_usage$Region[j+1] = Electricity_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+Usage <- function(var){
+  add <- 'N/A'
+  if (var == 'Generation (billion kWh)'){
+    add <- 'Generation'
+  }
+  else if(var == 'Consumption (billion kWh)'){
+    add <- 'Consumption'
+  }
+  return(add)
+}
+
+Electricity_usage <- mutate(Electricity_usage, 'Usage' = Usage(Electricity_usage$Type[1]))
+
+i <- 1
+while (i < length(Electricity_usage$Type)){
+  Electricity_usage$Usage[i] = Usage(Electricity_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Electricity_usage$Usage)){
+  if (Electricity_usage$Usage[j] != 'N/A' & Electricity_usage$Usage[j+1] == 'N/A'){
+    Electricity_usage$Usage[j+1] = Electricity_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Electricity_usage$API)){
+  if (is.na(Electricity_usage$API[i]) == TRUE){
+    is.na(Electricity_usage$Region[i]) = TRUE
+    is.na(Electricity_usage$Usage[i]) = TRUE
+    is.na(Electricity_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+Electricity_tidy <- Electricity_usage %>%
+  select(API, Region, Usage, everything())
+
+Electricity_tidy
+```
+
+
+```{r include=FALSE}
+Electricity_tidy <- Electricity_tidy %>%
+  filter(Region == 'World', Usage == 'Generation')
+
+#Total Electricity Generation
+Electricity_Generation <- Electricity_tidy %>%
+  filter(API == 'INTL.2-12-WORL-BKWH.A')
+
+Electricity_Generation <- Electricity_Generation %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Total_Generation') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+#Nuclear Power Production
+Electricity_Nuclear <- Electricity_tidy %>%
+  filter(API == 'INTL.27-12-WORL-BKWH.A')
+
+Electricity_Nuclear <- Electricity_Nuclear %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Nuclear') %>%
+  mutate_if(is.character, as.double)
+
+
+
+
+
+#Electricity Generated by Fossil Fuels
+Electricity_FossilFuels <- Electricity_tidy %>%
+  filter(API == 'INTL.28-12-WORL-BKWH.A')
+
+Electricity_FossilFuels <- Electricity_FossilFuels %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Fossil_Fuels') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+
+
+#Electricity Generated from Renewable sources
+Electricity_Renewables <- Electricity_tidy %>%
+  filter(API == 'INTL.29-12-WORL-BKWH.A')
+
+Electricity_Renewables<- Electricity_Renewables %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Renewables') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+
+
+#HydroElectricity
+Electricity_Hydroelectricity <- Electricity_tidy %>%
+  filter(API == 'INTL.33-12-WORL-BKWH.A')
+
+Electricity_Hydroelectricity<- Electricity_Hydroelectricity %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'HydroElectricity') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+
+
+#Non HydroElectric Renewables
+Electricity_NonHydro <- Electricity_tidy %>%
+  filter(API == 'INTL.34-12-WORL-BKWH.A')
+
+Electricity_NonHydro<- Electricity_NonHydro %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Non_HydroElectric_Renewables') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+
+#Geothermal
+Electricity_Geothermal <- Electricity_tidy %>%
+  filter(API == 'INTL.35-12-WORL-BKWH.A')
+
+Electricity_Geothermal <- Electricity_Geothermal %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Geothermal') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+
+#Solar, tide, wave, fuel cell 
+Electricity_SolarTidalWaveFuel <- Electricity_tidy %>%
+  filter(API == 'INTL.36-12-WORL-BKWH.A')
+
+Electricity_SolarTidalWaveFuel <- Electricity_SolarTidalWaveFuel %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Solar_Tidal_Wave_FuelCell') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+#Tide and Wave
+Electricity_TideWave <- Electricity_tidy %>%
+  filter(API == 'INTL.117-12-WORL-BKWH.A')
+
+Electricity_TideWave <- Electricity_TideWave %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Tide_Wave') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+
+
+#Solar
+Electricity_Solar <- Electricity_tidy %>%
+  filter(API == 'INTL.116-12-WORL-BKWH.A')
+
+Electricity_Solar <- Electricity_Solar %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Solar') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+
+
+#Wind
+Electricity_Wind <- Electricity_tidy %>%
+  filter(API == 'INTL.37-12-WORL-BKWH.A')
+
+Electricity_Wind <- Electricity_Wind %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Wind') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+
+
+#Biomass Waste
+Electricity_BiomassWaste <- Electricity_tidy %>%
+  filter(API == 'INTL.38-12-WORL-BKWH.A')
+
+Electricity_BiomassWaste <- Electricity_BiomassWaste %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Biomass_Waste') %>%
+  mutate_if(is.character, as.double)
+  
+
+
+
+#HydroElectric Pumped Storage
+Electricity_HydroPumped <- Electricity_tidy %>%
+  filter(API == 'INTL.82-12-WORL-BKWH.A')
+
+Electricity_HydroPumped <- Electricity_HydroPumped %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'HydroElectric_Pumped_Storage')%>%
+  mutate_if(is.character, as.double)
+  
+```
+
+Graphical Representation & Analysis of Electricity
+
+```{r}
+ggplot(Electricity_Generation, mapping = aes(Year, Total_Generation)) + geom_point() + geom_smooth() + ggtitle('Total Electricity Generated - Per Year')
+```
+Electricity 
+
+Electricity generation from the year 1980 keeps steadily increasing till 2020. More electricity is generated each year because some energy is lost as heat during transmission and distribution. In addition to this, some of the users generate electricity and use most or all of it which leads to higher generation of electricity. 
+
+
+
+```{r}
+ggplot(Electricity_Nuclear, mapping = aes(Year, Nuclear)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Nuclear Power - Per Year')
+```
+Nuclear Power 
+
+"Nuclear power is the use of nuclear reactions to produce electricity.” (“Nuclear power - Wikipedia”) It can be obtained from nuclear fission, nuclear decay, and nuclear fusion reactions. Most of electricity from nuclear power is derived from nuclear fission of uranium and plutonium in nuclear power plants.  
+
+The graph shows the electricity generated from nuclear power. The graph is increasing in an unsteady, slow rate from 1980 to 2006. There are several slight dips and rises during this period. It drops after 2006 and this is because nuclear power has been eclipsed by other energy sources, particularly coal and natural gas. It grows after 2013 and reaches its highest during 2019. This is because of the innovations and modern technologies introduced in the nuclear power sector. 
+
+
+
+
+```{r}
+ggplot(Electricity_FossilFuels, mapping = aes(Year, Fossil_Fuels)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Fossil Fuels - Per Year')
+```
+Fossil Fuels 
+
+Fossil fuel is a generic term used for non-renewable energy sources such as coal, coal products, natural gas, derived gas, crude oil, petroleum products, and non-renewable wastes. (“Glossary:Fossil fuel - Statistics Explained - European Commission”) They originate from plants and animals that existed in the geological past, i.e., millions of years ago. 
+
+The graph represents the data of electricity generated from fossil fuels per year. The rate of electricity generated climbs, but it experiences a very slight but sudden dip in 2009 and gradually increases till 2020. It clearly shows that the consumption of energy from fossil fuels has increased significantly, roughly doubling since 1980, but the types of fuel we rely upon has also shifted which explains the unsteadiness of the graph. 
+
+
+
+```{r}
+ggplot(Electricity_Renewables, mapping = aes(Year, Renewables)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Renewable Sources - Per Year')
+```
+Renewable electricity 
+
+Renewable energy is the energy derived from natural sources that are replenished at a higher rate than they are consumed. Sunlight and wind are, for example, such sources that are constantly being replenished. This source of energy is plentiful and all around us. 
+
+The graph above shows the amount of electricity generated from renewable sources each year. It ascends in a decreasing rate between 1980 and 2020. The primary production of renewable energy is on a long-term increasing trend. Between 1990 2015, total renewable electricity generation increased by 203% and in 2015, the electricity generation from renewable energy accounted for 29% of the total gross electricity generation. 
+
+
+
+```{r}
+ggplot(Electricity_Hydroelectricity, mapping = aes(Year, HydroElectricity)) + geom_point() + geom_smooth() + ggtitle('HydroElectricity Generated - Per Year')
+```
+Hydroelectricity
+
+Hydropower or hydroelectric power is a renewable source of energy that generates power by using a dam or diversion structure to alter the natural flow of a river or other water bodies. (“How Hydropower Works | Department of Energy”) It relies highly and completely on the constantly recharging system of water cycle to produce electricity. All kinds of hydropower facilities are all powered by the kinetic energy of flowing water as it is downstream. 
+
+This graph shows the data of hydroelectricity generation per year. This graph is similar to that of electricity generated from fossil fuels each year. Hydroelectricity generation increases in a slow pace from the year 1980 to 2020. China was responsible for 66% of the capacity growth, due to the commissioning of several large-scale projects. 
+
+
+```{r}
+ggplot(Electricity_NonHydro, mapping = aes(Year, Non_HydroElectric_Renewables)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Renewable Sources, Excluding Hydro - Per Year')
+```
+Renewable electricity 
+
+Renewable energy is the energy derived from natural sources that are replenished at a higher rate than they are consumed. (“What are renewable energy sources? (a) Natural resources that can...”) Sunlight and wind are some examples. This source of energy is plentiful and all around us. 
+The graph above shows the amount of electricity generated from renewable sources each year. It ascends in a decreasing rate between 1980 and 2020. The primary production of renewable energy is on a long-term increasing trend. Between 1990 and 2015, total renewable electricity generation increased by 20.3% and in 2015, the electricity generation from renewable energy accounted for 29% of the total gross electricity generation. 
+
+
+```{r}
+ggplot(Electricity_Geothermal, mapping = aes(Year, Geothermal)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Geothermal Energy - Per Year')
+```
+Geothermal 
+
+It is the thermal energy in the Earth’s crust which originates from the formation of the planet and from radioactive decay of materials. (“Geothermal energy - Wikipedia”) The geothermal power plants use steam to produce electricity the steam comes from the hot water reservoirs found a few miles or more below the surface of the Earth. This steam rotates a turbine which activates the generator and produce electricity. 
+This graph of geothermal energy production per year shows a constant increase throughout the period 1980 to 2020 with unstable underliers which keeps on rising and falling during the same time.  The percentage increase in installed capacity worldwide per annum in that same period, however, dropped from 13.5 in the 1980–1984 period to 9.6 in the period 1985–1989 and 0.5 in 1990–1992.
+
+
+```{r}
+ggplot(Electricity_SolarTidalWaveFuel, mapping = aes(Year, Solar_Tidal_Wave_FuelCell)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Solar, Tide, Wave and Fuel Cells - Per Year')
+```
+Solar, tide, wave, and fuel cells 
+
+Solar energy is generated by converting sunlight into electrical energy either through PV panels or through mirrors that concentrate solar radiation. Tidal energy is the form of energy that is generated from the natural rise and fall of tides. Wave energy is a renewable source of energy derived from the waves as they move across the water. (“Advantages and Disadvantages of Wave Energy - CBSE Library”) Fuel cell is an electrochemical sell that converts the chemical energy of a fuel and an oxidizing agent into electricity. (“Fuel cell - Wikipedia”) 
+
+This graph shows the rate of energy generated from solar, tide, wave, and fuel cells. The graph is stable from the year 1980 to 2005 and then it rises sharply until 2020. One of the reasons for the stable graph and sudden growth might be because the solar panels available are 100 times lower than the cost of solar panels in 1980s, increasing affordability of tidal energy shifted the innovation, incentive, and cost reduction towards other alternative energy sources. 
+
+
+```{r}
+ggplot(Electricity_Wind, mapping = aes(Year, Wind)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Wind Power - Per Year')
+```
+Wind 
+
+Wind or kinetic energy is the energy derived by converting moving air into electricity using wind turbines. It is one of the fastest growing methods of generating electricity in the world.
+
+This graph is remarkably similar to the previous graph as it is steady from 1980 to 200 and then increases significantly after 2000 till 2020. Wind power has grown rapidly since 2000, driven by R&D, supportive policies and falling costs. Global installed wind generation capacity – both onshore and offshore – has increased by a factor of 98 in the past two decades. 
+
+```{r}
+ggplot(Electricity_BiomassWaste, mapping = aes(Year, Biomass_Waste)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Organic Waste - Per Year')
+```
+Organic Waste 
+
+Energy in organic wastes is obtained through anaerobic digestion(“AD”) i.e., converting sugars and starches from food waste into biogas, which can then be used to produce electricity. (“Urban Waste to Electricity Demonstration - NRCan”) 
+
+The graph above shows the amount of electricity generated each year from organic wastes. The graph shows a regular growth on the generation of electricity derived from organic wastes between 1980 and 2020. Combustion of municipal solid waste grew in the 1980s. By the early 1990s, the United States combusted more than 15 percent of all wastes. Most non-hazardous waste incinerators were recovering energy by this time and had installed pollution control equipment. (“Energy Recovery from the Combustion of Municipal Solid Waste (MSW ...”) With the newly recognized threats posed by mercury and dioxin emissions, EPA enacted the Maximum Achievable Control Technology regulations in the 1990s.  
+
+```{r}
+ggplot(Electricity_HydroPumped, mapping = aes(Year, HydroElectric_Pumped_Storage)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Hydroelectric Pumps - Per Year')
+```
+Hydroelectric Pumps 
+
+Hydroelectric pump stores energy in the form of water in an upper reservoir, pumped from another reservoir at a lower elevation. (“Energy Storage - Breakthrough Energy”) Power is generated by releasing the stored water through turbines during periods of increaed necessity. 
+
+This dataset contains data on diverse types of Hydrocarbons and their production and consumption. It shows a negative trend starting at -10 ending at -40. The values here are negative as hydroelectric energy is one of the cleanest most renewable forms of energy. This trend could be a result of advancements in technology and newer methods of energy generation thus resulting in negative emissions. 
+
+
+## Hydrocarbons
+This dataset contains data on different types of Hydrocarbons and their production and consumption, only data form 1980 onwards is considered. 
+
+Hydrocarbons are organic chemical compounds composed of hydrogen and carbon atoms. They are obtained from nature and are the basis of energy sources like crude oil, natural gas, and coal. They combust readily to produce carbon dioxide and water along with a considerable amount of heat. Thus, they function as efficient sources of fuel.
+
+```{r include=FALSE}
+#HydroCarbon File
+Hydrocarbon_file <- 'INT-Export-HydroCarbonLiquids-09-09-2022_23-14-09.csv'
+Hydrocarbon_usage <- read_csv(Hydrocarbon_file, skip = 1)
+Hydrocarbon_usage <- Hydrocarbon_usage %>%
+  rename('Type' = 2) #fix unnamed columns
+```
+
+```{r include=FALSE}
+Countries <- function(var){
+  add <- 'N/A'
+  if (var != 'Production' & var != 'Liquefied petroleum gases and ethane (Mb/d)' & var != 'Liquefied petroleum gases and ethane (refinery) (Mb/d)' & var != 'Liquefied petroleum gases (nonrefinery) (Mb/d)' & var != 'Ethane (non refinery) (Mb/d)' & var != 'Consumption' & var != 'LPG (Mb/d)' & var != 'Ethane (Mb/d)' & var != 'Imports' & var != 'Exports'){
+    add <- var
+  }
+  return(add)
+}
+
+Hydrocarbon_usage <- mutate(Hydrocarbon_usage, 'Region' = Countries(Hydrocarbon_usage$Type[1]))
+
+i <- 1
+while (i < length(Hydrocarbon_usage$Type)){
+  Hydrocarbon_usage$Region[i] = Countries(Hydrocarbon_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Hydrocarbon_usage$Region)){
+  if (Hydrocarbon_usage$Region[j] != 'N/A' & Hydrocarbon_usage$Region[j+1] == 'N/A'){
+    Hydrocarbon_usage$Region[j+1] = Hydrocarbon_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+
+Usage <- function(var){
+  add <- 'N/A'
+  if (var == 'Production' | var == 'Consumption' | var == 'Imports' | var == 'Exports'){
+    add <- var
+  }
+  return(add)
+}
+
+Hydrocarbon_usage <- mutate(Hydrocarbon_usage, 'Usage' = Usage(Hydrocarbon_usage$Type[1]))
+
+i <- 1
+while (i < length(Hydrocarbon_usage$Type)){
+  Hydrocarbon_usage$Usage[i] = Usage(Hydrocarbon_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Hydrocarbon_usage$Usage)){
+  if (Hydrocarbon_usage$Usage[j] != 'N/A' & Hydrocarbon_usage$Usage[j+1] == 'N/A'){
+    Hydrocarbon_usage$Usage[j+1] = Hydrocarbon_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Hydrocarbon_usage$API)){
+  if (is.na(Hydrocarbon_usage$API[i]) == TRUE){
+    is.na(Hydrocarbon_usage$Region[i]) = TRUE
+    is.na(Hydrocarbon_usage$Usage[i]) = TRUE
+    is.na(Hydrocarbon_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+Hydrocarbon_tidy <- Hydrocarbon_usage %>%
+  select(API, Region, Usage, everything())
+
+
+Hydrocarbon_tidy
+```
+
+```{r include=FALSE}
+Hydrocarbon_tidy<- Hydrocarbon_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+#For this dataset there is no data before 2006, they are all N/A values, so We will be skipping over them
+
+
+#Liquified Petroleum Gases and Ethane, Total
+Hydrocarbon_LiquifiedPetrol <- Hydrocarbon_tidy %>%
+  filter(API == 'INTL.13-1-WORL-TBPD.A')
+
+Hydrocarbon_LiquifiedPetrol <- Hydrocarbon_LiquifiedPetrol %>%
+  select('2006':'2014') %>%
+  pivot_longer('2006':'2014', names_to = 'Year', values_to = 'Liquified_Petroleum_Gases_and_Ethane_Total')%>%
+  mutate_if(is.character, as.double)
+
+#Liquified Petroleum Gases and Ethane, from Refinery
+Hydrocarbon_LiquifidPetrol_Refine <- Hydrocarbon_tidy %>%
+  filter(API == 'INTL.6798-1-WORL-TBPD.A')
+
+Hydrocarbon_LiquifidPetrol_Refine <- Hydrocarbon_LiquifidPetrol_Refine %>%
+  select('2006':'2014') %>%
+  pivot_longer('2006':'2014', names_to = 'Year', values_to = 'Liquified_Petroleum_Gases_and_Ethane_Refinery')%>%
+  mutate_if(is.character, as.double)
+
+
+#Liquified Petroleum Gases and Ethane, not from Refinery
+Hydrocarbon_LiquifidPetrol_NonRefine <- Hydrocarbon_tidy %>%
+  filter(API == 'INTL.6799-1-WORL-TBPD.A')
+
+Hydrocarbon_LiquifidPetrol_NonRefine <- Hydrocarbon_LiquifidPetrol_NonRefine %>%
+  select('2006':'2014') %>%
+  pivot_longer('2006':'2014', names_to = 'Year', values_to = 'Liquified_Petroleum_Gases_and_Ethane_Non_Refinery')%>%
+  mutate_if(is.character, as.double)
+
+#Ethane alone, non refinery
+Hydrocarbon_Ethane <- Hydrocarbon_tidy %>%
+  filter(API == 'INTL.8399-1-WORL-TBPD.A')
+
+Hydrocarbon_Ethane <- Hydrocarbon_Ethane %>%
+  select('2006':'2014') %>%
+  pivot_longer('2006':'2014', names_to = 'Year', values_to = 'Ethane')%>%
+  mutate_if(is.character, as.double)
+
+```
+
+Graphical Representation & Analysis of Hydrocarbons
+
+ 
+```{r}
+ggplot(Hydrocarbon_LiquifiedPetrol, mapping = aes(Year, Liquified_Petroleum_Gases_and_Ethane_Total)) + geom_point() + geom_smooth() + ggtitle('Total Liquid Petroleum and Ethane Produced - Per Year')
+```
+Hydrocarbons
+
+Data regarding the production of liquid petroleum and ethane is present only from 2006 to 2012. There is a notable leap between the years 2009 and 2010. This could be a result of the advocacy towards and utilization of horizontal drilling and hydraulic fracturing in American oil and gas industries. In 2008, this led them into a new age called the shale revolution. 
+
+```{r}
+ggplot(Hydrocarbon_LiquifidPetrol_Refine, mapping = aes(Year, Liquified_Petroleum_Gases_and_Ethane_Refinery)) + geom_point() + geom_smooth() + ggtitle('Liquid Petroleum and Ethane Produced by Refineries - Per Year')
+```
+Liquid Petroleum & Ethane produced in refineries
+
+Starting in 2006, the first three years have a decreasing slope, but 2010 changes the narrative by showing a steep incline. The curve turns down again and descends for the next two years. Overall, in six years, the production has gone down by 100 units (from 3160 units to 3060 units). 
+
+```{r}
+ggplot(Hydrocarbon_LiquifidPetrol_NonRefine, mapping = aes(Year, Liquified_Petroleum_Gases_and_Ethane_Non_Refinery)) + geom_point() + geom_smooth() + ggtitle('Liquid Petroleum and Ethane, Not Produced by Refineries - Per Year')
+```
+Liquid Petroleum & Ethane not produced in refineries
+
+
+While refineries were not performing very well, liquid petroleum and ethane not produced in refineries has followed a trend of steady incline throughout the six years. Until 2009, there has been a moderately low tangent, but this seems to have picked up in 2010. The new gradient—approximately 200 units each year—has maintained its presence for the next two years. 
+
+
+
+## Natural Gas
+This dataset contains data about the produciton and consumption of Natural Gasses for creating energy and fuels, only data form 1980 onwards is considered
+
+Natural gas is a gaseous mixture of naturally occurring compounds called hydrocarbons, primarily methane. When pressure and heat transforms decaying plant and animal matter, over a million years, natural gas is formed. It is locked under several rock layers to keep it from escaping to the surface.  
+
+```{r include=FALSE}
+#Natural Gas File
+Natural_Gas_file <- 'INT-Export-NaturalGas-09-09-2022_23-11-09.csv'
+Natural_Gas_usage <- read_csv(Natural_Gas_file, skip = 1)
+Natural_Gas_usage <- Natural_Gas_usage %>%
+  rename('Type' = 2)
+```
+
+
+```{r include=FALSE}
+Countries <- function(var){
+  add <- 'N/A'
+  if (var != 'Production' & var != 'Gross natural gas (bcf)' & var != 'Dry natural gas (bcf)' & var != 'Vented and flared natural gas (bcf)' & var != 'Reinjected natural gas (bcf)' & var != 'Consumption' & var != 'Imports' & var != 'Exports' & var != 'Reserves' & var != 'Gross natural gas (tcf)' & var != 'Emissions (MMtonnes CO2)'){
+    add <- var
+  }
+  return(add)
+}
+
+Natural_Gas_usage <- mutate(Natural_Gas_usage, 'Region' = Countries(Natural_Gas_usage$Type[1]))
+
+i <- 1
+while (i < length(Natural_Gas_usage$Type)){
+  Natural_Gas_usage$Region[i] = Countries(Natural_Gas_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Natural_Gas_usage$Region)){
+  if (Natural_Gas_usage$Region[j] != 'N/A' & Natural_Gas_usage$Region[j+1] == 'N/A'){
+    Natural_Gas_usage$Region[j+1] = Natural_Gas_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+
+Usage <- function(var){
+  add <- 'N/A'
+  if(var == 'Production' | var == 'Consumption' | var == 'Imports' | var == 'Exports' | var == 'Reserves'){
+    add <- var
+  }
+  return(add)
+}
+
+Natural_Gas_usage <- mutate(Natural_Gas_usage, 'Usage' = Usage(Natural_Gas_usage$Type[1]))
+
+i <- 1
+while (i < length(Natural_Gas_usage$Type)){
+  Natural_Gas_usage$Usage[i] = Usage(Natural_Gas_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Natural_Gas_usage$Usage)){
+  if (Natural_Gas_usage$Usage[j] != 'N/A' & Natural_Gas_usage$Usage[j+1] == 'N/A'){
+    Natural_Gas_usage$Usage[j+1] = Natural_Gas_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Natural_Gas_usage$API)){
+  if (is.na(Natural_Gas_usage$API[i]) == TRUE){
+    is.na(Natural_Gas_usage$Region[i]) = TRUE
+    is.na(Natural_Gas_usage$Usage[i]) = TRUE
+    is.na(Natural_Gas_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+
+Natural_Gas_tidy <- Natural_Gas_usage %>%
+  select(API, Region, Usage, everything())
+
+Natural_Gas_tidy
+```
+
+
+```{r include=FALSE}
+Natural_Gas_tidy <- Natural_Gas_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+
+#Total Natural Gas
+Natural_Gas_Total <- Natural_Gas_tidy %>%
+  filter(API == 'INTL.3-1-WORL-BCF.A')
+
+Natural_Gas_Total <- Natural_Gas_Total %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Total_Natural_Gas')%>%
+  mutate_if(is.character, as.double)
+  
+
+#Dry Natural Gas
+Natural_Gas_Dry <- Natural_Gas_tidy %>%
+  filter(API == 'INTL.26-1-WORL-BCF.A')
+
+Natural_Gas_Dry <- Natural_Gas_Dry %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Dry_Natural_Gas')%>%
+  mutate_if(is.character, as.double)
+
+
+#Vented and Flared Natural Gas
+Natural_Gas_VentedFlared <- Natural_Gas_tidy %>%
+  filter(API == 'INTL.43-1-WORL-BCF.A')
+
+Natural_Gas_VentedFlared <- Natural_Gas_VentedFlared %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Natural_Gas_Vented_and_Flared')%>%
+  mutate_if(is.character, as.double)
+
+
+#Reinjected Natural Gas
+Natural_Gas_Reinjected <- Natural_Gas_tidy %>%
+  filter(API == 'INTL.48-1-WORL-BCF.A')
+
+Natural_Gas_Reinjected <- Natural_Gas_Reinjected %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Reinjected_Natural_Gas')%>%
+  mutate_if(is.character, as.double)
+  
+```
+
+Graphical Representation & Analysis of Natural Gas
+  
+```{r}
+ggplot(Natural_Gas_Total, mapping = aes(Year, Total_Natural_Gas)) + geom_point() + geom_smooth() + ggtitle('Total Natural Gas Produced - Per Year')
+```
+Natural Gas 
+
+For 25 years since 1990, the total production of natural gas has climbed steadily. 1996 and 2009 are benign outliers as the production is a little more than the usual trend in 1996 and less than the expected amount in 2009. [There is no other major significant conclusion that can be drawn from the analysis of the graph.] 
+
+
+```{r}
+ggplot(Natural_Gas_Dry, mapping = aes(Year, Dry_Natural_Gas)) + geom_point() + geom_smooth() + ggtitle('Dry Natural Gas Production - Per Year')
+```
+Dry Natural Gas 
+
+Natural gas that is left over after separating the liquifiable hydrocarbon portion from the has stream (after lease, field, and plant separation) and after the removal gases that are not hydrocarbons present in excess. The resulting dry natural gas is consumer-grade natural gas. The parameters for measurement are cubic feet at 60 degrees Fahrenheit and 14.73 pounds per square inch absolute. 
+
+Like the graph of total natural gas production, there has been a gradual rise in the production of dry natural gas. The data is present for 29 years until 2019, while the total production only covered 1980 to 2015. Despite this and the fact that there are a few mild outliers, there is no change in the trend. 
+
+```{r}
+ggplot(Natural_Gas_VentedFlared, mapping = aes(Year, Natural_Gas_Vented_and_Flared)) + geom_point() + geom_smooth() + ggtitle('Natural Gas Produced from Venting and Flaring - Per Year')
+```
+Venting and Flaring 
+
+The process of releasing methane gas directly into the atmosphere is called venting. It occurs multiple times during the development process of oil and gas. 
+
+Burning gas that is determined to be unprofitable to manufacture is known as flaring. This also applies to gases that could otherwise be potentially harmful. Natural gas containing sour gas (hydrogen sulphide) is a prominent example of a gas that is flared. This converts hydrogen sulphide that is extremely toxic into less toxic compounds. 
+
+The data regarding venting and flaring is all over the place and a trend line is necessary to make sense of it. The data collected could be collected at different points in the process, thus rendering varied results. Some countries could be collecting the data points either in the beginning of the process or at the end of the process this could result in the data points being varied. as the data represented is an aggregate of the global production the points for 1980 and 81 could be completely different as in 1980 make sure the countries could have measured the production in the initial stages of the process while in 81 taken measured the production in the later stage of the process where lesser venting and flaring is produced. However, the overall trend of the production rises from 1980 to 2015 with a greater increase between 1990 and 1995 slowly declining from 1994 the jump in 1991 could be due to the sudden increase in oil production in the Middle East. Following the discovery of oil in the Middle East in 1970s the early 1990s so rapid technological advancement in the production of oil. The early 1990s was also an era of global militarization that is requiring more oil and natural gas in the production and usage of military technology. 
+
+```{r}
+ggplot(Natural_Gas_Reinjected, mapping = aes(Year, Reinjected_Natural_Gas)) + geom_point() + geom_smooth() + ggtitle('Production of Reinjected Natural Gasses - Per Year')
+```
+Reinjected 
+
+The process of injecting natural gas into the well to increase the flow of crude oil is known as reinjection of natural gas. Without this, the sequester gas cannot be disseminated. 
+
+The data is presented for the years between 1980 and 2015. There was barely any difference in the production of reinjected natural gas in the first 9 years, but in 1990, an astronomical surge is seen. By 1989, the U.S. Environmental Protection Agency had announced its intention to set limits for NOx emissions from all municipal waste combustors (MWCs). [cite the source for the previous sentence as it is a direct quote.] A recent technology of utilizing natural gas in MWCs was introduced. In this process, the reinjected natural gas is combined with flue gases for mixing and then recirculated above the grate. This provides reducing combustion conditions, promoting the demolition of NOx and its precursors. 
+
+## Primary Energy
+This dataset focusses on Primary Energy production and consumption, only data from 1980 onwards is considered.
+
+Primary energy is energy that is “raw” and must be converted into useful forms for humans to use. Examples include electricity, heat, transport. They are like the inputs of energy before being converted so they are user friendly. 
+```{r include=FALSE}
+#Primary Energy File
+Primary_Energy_file <- 'INT-Export-PrimaryEnergy-09-09-2022_23-12-37.csv'
+Primary_Energy_usage <- read_csv(Primary_Energy_file, skip = 1)
+Primary_Energy_usage <- Primary_Energy_usage %>%
+  rename('Type' = 2)
+```
+
+```{r include=FALSE}
+tidying <- function(var){
+  add <- 'N/A'
+  if (var != 'Production (quad Btu)' & var != 'Coal (quad Btu)' & var != 'Natural gas (quad Btu)' & var != 'Petroleum and other liquids (quad Btu)' & var != 'Nuclear, renewables, and other (quad Btu)' & var != 'Nuclear (quad Btu)' & var != 'Renewables and other (quad Btu)' & var != 'Consumption (quad Btu)'){
+    add <- var
+  }
+  return(add)
+}
+
+Primary_Energy_usage <- mutate(Primary_Energy_usage, 'Region' = tidying(Primary_Energy_usage$Type[1]))
+
+i <- 1
+while (i < length(Primary_Energy_usage$Type)){
+  Primary_Energy_usage$Region[i] = tidying(Primary_Energy_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Primary_Energy_usage$Region)){
+  if (Primary_Energy_usage$Region[j] != 'N/A' & Primary_Energy_usage$Region[j+1] == 'N/A'){
+    Primary_Energy_usage$Region[j+1] = Primary_Energy_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+Usage <- function(var){
+  add <- 'N/A'
+  if (var == 'Production (quad Btu)'){
+    add <- 'Production'
+  }
+  else if(var == 'Consumption (quad Btu)'){
+    add <- 'Consumption'
+  }
+  return(add)
+}
+
+Primary_Energy_usage <- mutate(Primary_Energy_usage, 'Usage' = Usage(Primary_Energy_usage$Type[1]))
+
+i <- 1
+while (i < length(Primary_Energy_usage$Type)){
+  Primary_Energy_usage$Usage[i] = Usage(Primary_Energy_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Primary_Energy_usage$Usage)){
+  if (Primary_Energy_usage$Usage[j] != 'N/A' & Primary_Energy_usage$Usage[j+1] == 'N/A'){
+    Primary_Energy_usage$Usage[j+1] = Primary_Energy_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Primary_Energy_usage$API)){
+  if (is.na(Primary_Energy_usage$API[i]) == TRUE){
+    is.na(Primary_Energy_usage$Region[i]) = TRUE
+    is.na(Primary_Energy_usage$Usage[i]) = TRUE
+    is.na(Primary_Energy_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+Primary_Energy_tidy <- Primary_Energy_usage %>%
+  select(API, Region, Usage, everything())
+
+Primary_Energy_tidy
+
+```
+
+```{r include=FALSE}
+Primary_Energy_tidy <- Primary_Energy_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+
+
+#Primary Energy Total Production
+Primary_Energy_Production <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.44-1-WORL-QBTU.A')
+
+Primary_Energy_Production <- Primary_Energy_Production %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Total_Production')%>%
+  mutate_if(is.character, as.double)
+  
+
+#Primary Energy Coal Production
+Primary_Energy_Coal <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4411-1-WORL-QBTU.A')
+
+Primary_Energy_Coal <- Primary_Energy_Coal %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Coal')%>%
+  mutate_if(is.character, as.double)
+
+
+#Primary Energy Natural Gas
+Primary_Energy_Natural_Gas <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4413-1-WORL-QBTU.A')
+
+Primary_Energy_Natural_Gas <- Primary_Energy_Natural_Gas %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Natural_Gas_Primary_Energy')%>%
+  mutate_if(is.character, as.double)
+
+
+#Petroleum and Other Liquids
+Primary_Energy_Petrol <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4415-1-WORL-QBTU.A')
+
+Primary_Energy_Petrol <- Primary_Energy_Petrol %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Petroleum_and_Other_Liquids')%>%
+  mutate_if(is.character, as.double)
+
+#Nuclear, Renewables and Other
+Primary_Energy_Nuc_Renew_Other <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4419-1-WORL-QBTU.A')
+
+Primary_Energy_Nuc_Renew_Other <- Primary_Energy_Nuc_Renew_Other %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Nuclear_Renewable_Other')%>%
+  mutate_if(is.character, as.double)
+
+#Nuclear
+Primary_Energy_Nuclear <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4417-1-WORL-QBTU.A')
+
+Primary_Energy_Nuclear <- Primary_Energy_Nuclear %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Nuclear')%>%
+  mutate_if(is.character, as.double)
+  
+
+#Renewables and Other
+Primary_Energy_Renew_Other <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4418-1-WORL-QBTU.A')
+
+Primary_Energy_Renew_Other <- Primary_Energy_Renew_Other %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Renewables_and_Other')%>%
+  mutate_if(is.character, as.double)
+```
+
+Graphical Representation & Analysis of Primary Sources of Energy
+
+```{r}
+ggplot(Primary_Energy_Production, mapping = aes(Year, Total_Production)) + geom_point() + geom_smooth() + ggtitle('Total Primary Energy Produced - Per Year')
+```
+Primary Energy Production 
+
+There is a straight increase in primary energy production throughout the years. Although it decreased a couple times throughout the years, the general trend is increasing. In 1980, the production started off at 300 and just before 2020 it reaches a high of more than 600. This shows that the production is increasing drastically with at a steady speed. It only decreases 50-100 a year before it increases again the next year. Overall, the production trend for primary energy is increasing at a steady pace throughout the years.  
+
+```{r}
+ggplot(Primary_Energy_Coal, mapping = aes(Year, Coal)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Coal - Per Year')
+```
+Coal 
+
+Coal is a black or brownish-grey rock, it can be burned for fuel or used to generate electricity. It is made up mostly of carbons and hydrocarbons. Today, coal is the largest source for generating energy and the most abundant fossil fuel in the US. Coal is originally made of fragile plant matter and goes through many changes before becoming the coal we use for energy. 
+
+Coal mostly has an increase throughout the years, although it is not as steady and straight as the overall primary energy graph. Coal production spiked significantly between 1985-1990 before dropping to a regular production. Another drastic increase was in between 2010-2015 after which it decreased slightly before going back to a normal production. Overall, the coal production has had many difficulties but has an increasing trend. This trend is not as strong as the general primary energy production graph.  
+
+```{r}
+ggplot(Primary_Energy_Natural_Gas, mapping = aes(Year, Natural_Gas_Primary_Energy)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Natural Gasses - Per Year')
+```
+Natural Gas 
+
+Natural gas is a fossil fuel, it formed using plants, animals, and microorganisms that existed on the plant. Near oil deposits are frequently discovered natural gas reserves. Natural gas reserves found nearby the Earth's surface are typically dwarfed by neighbouring oil reserves. Natural gas is more abundant than oil in deeper deposits because they were created at higher temperatures and pressures. The purest natural gas may be found at the deepest deposits. 
+
+The graph has been increasing steadily throughout the years. There are no significant changes or occurrences in the production of natural gas. The trend has a strong correlation and looks strongly linear. There are no major changes in natural gas production from 1980 to the 2020. 
+
+```{r}
+ggplot(Primary_Energy_Petrol, mapping = aes(Year, Petroleum_and_Other_Liquids)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Liquids - Per Year')
+```
+Liquids 
+
+Using water to make energy has a long history in our world. Greeks have been grinding wheat into flour for over 2,000 years by using flowing water to turn their mill's wheel. Flowing water is used to turn into energy and generate electricity, this is known as hydroelectricity. Just before water rushes over the top of a dam or cascades down a hill, it gains potential energy. Water flowing downhill changes potential energy into kinetic energy, and this kinetic energy is then utilized. 
+
+The production of liquids started at a high after which it decreased and has been following an increasing-decreasing pattern since then. The production is not consistent, and has been fluctuating a lot since the 1980’s. The pattern is not steady at all and goes up and down year after year. The pattern varies year after year, sometimes increasing, sometimes decreasing. Currently (near 2020), the production is increasing for the most part. This adds onto the findings that overall energy use is increasing as time goes on. 
+
+```{r}
+ggplot(Primary_Energy_Nuclear, mapping = aes(Year, Nuclear)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Nuclear Power - Per Year')
+```
+Nuclear 
+
+Electricity can be produced using nuclear energy, but it first needs to be released from the atom. All that exists in the planet is made up of microscopic building blocks called atoms, and the atom's nucleus is held together by energy. In 2011, 15% of the world’s energy was generated through nuclear power plants. 
+
+The pattern for this graph is quite different compared to the others. The other graphs were increasing at an increasing rate whereas this one is increasing at a decreasing rate. The pattern for this graph is steadily increasing, with no major bumps or outliers. One exception is in 2012/13 where there is a dip in production before it increases again, but at a lower amount than before. Up until 2012/13, the graph is increasing at a decreasing rate, however, after 2012/13 it changes to increasing at an increasing rate. This graph differs significantly from all the others.  
+
+```{r}
+ggplot(Primary_Energy_Renew_Other, mapping = aes(Year, Renewables_and_Other)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Renewables and Other Energy Sources - Per Year')
+```
+Renewable 
+
+Renewable energy is derived from natural phenomena. Renewable energy can be obtained from the sun or from heat generated deep within the earth. Renewable energy is replenished at a rate greater than or equal to the rate of consumption. Examples of renewable energy include solar, wind, geothermal, hydropower, and more. Several technological advancements have been made in the past years to capture the full potential of renewable energy. 
+
+The renewable energies graph is similar to the natural gas energy graph. The data is increasing at an increasing rate, at a constant rate. There is no severe outliers or mismatched data points. In between 1995-2000 the production increased at a slightly larger amount than the years before, but nothing too unusual. The production went back to normal after 2000. 
+
+#Petro Liquids
+This dataset contains information for the production and consumption of Petroleum and other liquids, motor oil, jet fuel etc.
+
+Petro liquid, also called crude oil, is a fossil fuel. Petroleum was formed from the remains of marine organisms like plants, algae, and bacteria, that are millions of years old, just like coal and natural gas. (“What fuels were formed over millions of years from the remains of ...”) 
+
+```{r include=FALSE}
+Petro_Liquids_file <- 'INT-Export-PetroLiquids-09-09-2022_23-10-18.csv'
+Petro_Liquids_usage <- read_csv(Petro_Liquids_file, skip = 1)
+Petro_Liquids_usage <- Petro_Liquids_usage %>%
+  rename('Type' = 2)
+```
+
+```{r include=FALSE}
+Countries <- function(var){
+  add <- 'N/A'
+  if(var != 'Production' & var != 'Total petroleum and other liquids (Mb/d)' & var != 'Crude oil, NGPL, and other liquids (Mb/d)' & var != 'Crude oil including lease condensate (Mb/d)' & var != 'NGPL (Mb/d)' & var != 'Other liquids (Mb/d)' & var != 'Refinery processing gain (Mb/d)' & var != 'Refined petroleum products (Mb/d)' & var != 'Motor gasoline (Mb/d)' & var != 'Jet fuel (Mb/d)' & var != 'Kerosene (Mb/d)' & var != 'Distillate fuel oil (Mb/d)' & var != 'Residual fuel oil (Mb/d)' & var != 'Liquefied Petroleum Gases (Mb/d)' & var != 'Other petroleum liquids (Mb/d)' & var != 'Consumption (Mb/d)' & var != 'Imports' & var != 'Exports' & var != 'Reserves' & var != 'Crude oil including lease condensate (billion b)' & var != 'Bunker' & var != 'Emissions (MMtonnes CO2)'){
+    add <- var
+  }
+  return(add)
+}
+
+Petro_Liquids_usage <- mutate(Petro_Liquids_usage, 'Region' = Countries(Petro_Liquids_usage$Type[1]))
+
+i <- 1
+while (i < length(Petro_Liquids_usage$Type)){
+  Petro_Liquids_usage$Region[i] = Countries(Petro_Liquids_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Petro_Liquids_usage$Region)){
+  if (Petro_Liquids_usage$Region[j] != 'N/A' & Petro_Liquids_usage$Region[j+1] == 'N/A'){
+    Petro_Liquids_usage$Region[j+1] = Petro_Liquids_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+Usage <- function(var){
+  add <- 'N/A'
+  if(var == 'Production' | var == 'Imports' | var == 'Exports' | var == 'Reserves' | var == 'Bunker'){
+    add <- var
+  }
+  else if(var == 'Consumption (Mb/d)'){
+    var = 'Consumption'
+    add <- var
+  }
+  return(add)
+}
+
+Petro_Liquids_usage <- mutate(Petro_Liquids_usage, 'Usage' = Usage(Petro_Liquids_usage$Type[1]))
+
+i <- 1
+while (i < length(Petro_Liquids_usage$Type)){
+  Petro_Liquids_usage$Usage[i] = Usage(Petro_Liquids_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Petro_Liquids_usage$Usage)){
+  if (Petro_Liquids_usage$Usage[j] != 'N/A' & Petro_Liquids_usage$Usage[j+1] == 'N/A'){
+    Petro_Liquids_usage$Usage[j+1] = Petro_Liquids_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Petro_Liquids_usage$API)){
+  if (is.na(Petro_Liquids_usage$API[i]) == TRUE){
+    is.na(Petro_Liquids_usage$Region[i]) = TRUE
+    is.na(Petro_Liquids_usage$Usage[i]) = TRUE
+    is.na(Petro_Liquids_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+Petro_Liquids_tidy <- Petro_Liquids_usage %>%
+  select(API, Region, Usage, everything())
+
+Petro_Liquids_tidy
+```
+
+```{r include=FALSE}
+Petro_Liquids_tidy <- Petro_Liquids_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+#Total Petroleum and Other Liquids
+Petro_Liquids_Petroleum <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.53-1-WORL-TBPD.A')
+
+Petro_Liquids_Petroleum <- Petro_Liquids_Petroleum %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Petroleum_and_Other_Liquids')%>%
+  mutate_if(is.character, as.double)
+
+
+#Crude Oil, NPGL and other liquids
+Petro_Liquids_ManyLiquids <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.55-1-WORL-TBPD.A')
+
+Petro_Liquids_ManyLiquids <- Petro_Liquids_ManyLiquids %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Crude_Oil_NPGL_and_other_Liquids')%>%
+  mutate_if(is.character, as.double)
+
+#Crude Oil, including Lease Condensate
+Petro_Liquids_Crude_Lease <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.57-1-WORL-TBPD.A')
+
+Petro_Liquids_Crude_Lease <- Petro_Liquids_Crude_Lease %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Crude_Oil_Including_Lease_Condensate')%>%
+  mutate_if(is.character, as.double)
+  
+#NPGL
+Petro_Liquids_NPGL <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.58-1-WORL-TBPD.A')
+
+Petro_Liquids_NPGL <- Petro_Liquids_NPGL %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'NPGL')%>%
+  mutate_if(is.character, as.double)
+  
+#Other Liquids
+Petro_Liquids_Other <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.59-1-WORL-TBPD.A')
+
+Petro_Liquids_Other <- Petro_Liquids_Other %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Other')%>%
+  mutate_if(is.character, as.double)
+  
+
+#Refinery Processing Gain
+Petro_Liquids_Refinery_Processing <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.56-1-WORL-TBPD.A')
+
+Petro_Liquids_Refinery_Processing <- Petro_Liquids_Refinery_Processing %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Refinery_Processing_Gain')%>%
+  mutate_if(is.character, as.double)
+  
+#Refined Petroleum Products
+Petro_Liquids_Refined_Petroleum <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.54-1-WORL-TBPD.A')
+
+Petro_Liquids_Refined_Petroleum <- Petro_Liquids_Refined_Petroleum %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Refinery_Petroleum_Products')%>%
+  mutate_if(is.character, as.double)
+  
+#Motor Gasoline
+Petro_Liquids_MotoGas <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.62-1-WORL-TBPD.A')
+
+Petro_Liquids_MotoGas <- Petro_Liquids_MotoGas %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Motor_Gasoline')%>%
+  mutate_if(is.character, as.double)
+  
+#Jet Fuel
+Petro_Liquids_JetFuel <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.63-1-WORL-TBPD.A')
+
+Petro_Liquids_JetFuel <- Petro_Liquids_JetFuel %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Jet_Fuel')%>%
+  mutate_if(is.character, as.double)
+
+#Kerosene
+Petro_Liquids_Kerosene <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.64-1-WORL-TBPD.A')
+
+Petro_Liquids_Kerosene <- Petro_Liquids_Kerosene %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Kerosene')%>%
+  mutate_if(is.character, as.double)
+  
+#Distillate Fuel Oil
+Petro_Liquids_DistFuel <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.65-1-WORL-TBPD.A')
+
+Petro_Liquids_DistFuel <- Petro_Liquids_DistFuel %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Distillate_Fuel_Oil')%>%
+  mutate_if(is.character, as.double)
+  
+
+#Residual Fuel Oil
+Petro_Liquids_ResFuel <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.66-1-WORL-TBPD.A')
+
+Petro_Liquids_ResFuel <- Petro_Liquids_ResFuel %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Residual_Fuel_Oil')%>%
+  mutate_if(is.character, as.double)
+  
+
+#Liquified Petroleum Gases
+Petro_Liquids_LPetroGas <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.67-1-WORL-TBPD.A')
+
+Petro_Liquids_LPetroGas <- Petro_Liquids_LPetroGas %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Liquified_Petroleum_Gas')%>%
+  mutate_if(is.character, as.double)
+  
+
+#Other Petroleum Liquids
+Petro_Liquids_Other_Liquids <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.68-1-WORL-TBPD.A')
+
+Petro_Liquids_Other_Liquids <- Petro_Liquids_Other_Liquids %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Other_Petroleum_Liquids')%>%
+  mutate_if(is.character, as.double)
+```
+Graphical Representation & Analysis of Petro-Liquids
+
+```{r}
+ggplot(Petro_Liquids_Petroleum, mapping = aes(Year, Petroleum_and_Other_Liquids)) + geom_point() + geom_smooth() + ggtitle('Total Petro Liquids Produced - Per Year')
+```
+Petro-Liquids
+
+There is a drastic decrease in the production of Petro liquids between 1980-85, this could be due to reduced demand and increased production produced a glut on the world market. The result was a six-year decline in oil production and price, with the price falling by half in 1986 alone. (“1980s oil glut - Wikipedia”) Then there is a gradual increase in production from 1985 onwards. 
+
+
+```{r}
+ggplot(Petro_Liquids_Crude_Lease, mapping = aes(Year, Crude_Oil_Including_Lease_Condensate)) + geom_point() + geom_smooth() + ggtitle('Production of Crude Oil, including Lease Condensate - Per Year')
+```
+Crude oil and lease condensate 
+
+Crude oil is a naturally occurring liquid petroleum product composed of hydrocarbon deposits and other organic materials formed from the remains of animals and plants that lived millions of years ago and lease condensate is Light liquid hydrocarbons recovered from lease separators or field facilities at associated and non-associated natural gas wells. Pentanes and heavier hydrocarbons are the majority. After production, typically enters the crude oil stream. 
+
+Production of crude oil including lease condensate from 1980 to 1990 is largely similar to that of biofuel. There is a drastic decrease until 1885, after which it increases moderately from 1885 onwards 
+
+```{r}
+ggplot(Petro_Liquids_NPGL, mapping = aes(Year, NPGL)) + geom_point() + geom_smooth() + ggtitle('Total NPGL Production - Per Year')
+```
+NPGL
+
+NPGL are light hydrocarbons produced together with natural gas and recovered at natural gas processing plants. Crude oil refining also yields these hydrocarbons. 
+
+There is a gradual increase in the production of NPGL from 1980 to 1994.As the production has in increased from 3500 to 5500 in the span of 14 years. The trend has a strong correlation and looks strongly linear and their no major change from 1980-1944. 
+
+```{r}
+ggplot(Petro_Liquids_Other, mapping = aes(Year, Other)) + geom_point() + geom_smooth() + ggtitle('Production of Other Petro-Liquids - Per Year')
+```
+Other petroleum liquids 
+
+Other petroleum liquids include gasoline, heating oil, diesel, propane, and other liquids including biofuels and natural gas liquids etc. 
+
+There is a gradual increase in the production of other petroleum liquids from 1980-1990, then we can observe a dramatic increase in the production from 1990-1994 as the production goes from 400-800 in the span of 4 years. Over the course of the United States' history, patterns of energy consumption have changed significantly as new energy sources and energy uses have evolved. 
+
+```{r}
+ggplot(Petro_Liquids_Refinery_Processing, mapping = aes(Year, Refinery_Processing_Gain)) + geom_point() + geom_smooth() + ggtitle('Refinery Processing Gain - Per Year')
+```
+Refinery processing grain 
+
+Most products produced by refineries have a lower density than the oil they process, so the amount of products produced at refineries (output) is greater than the amount of oil processed at refineries (input). This increase in volume is called processing grain 
+
+There is a straight increase in refinery processing grain production from 1980 – 1985, then we can see a slight decrease in production 1985-1990 then there is a gradual increase onwards from 1990-1994 as the production goes up from 900-1300. 
+
+```{r}
+ggplot(Petro_Liquids_Refined_Petroleum, mapping = aes(Year, Refinery_Petroleum_Products)) + geom_point() + geom_smooth() + ggtitle('Production of Refined Petroleum Products - Per Year')
+```
+Refined-Petro liquids 
+
+Processes such as catalytic cracking and fractional distillation produce refined petroleum products. (“United States Refined Petroleum Products Market - Growth, Trends, and ...”) These products have physical and chemical properties that depend on the type of crude oil and subsequent refining processes. 
+
+There is a drastic increase in the production of refined petroleum products from 1985- 1990 then from 1990 onwards its steady increases till 1994. After growing rapidly through the early 1980's, the total value of shipments for the Refined Petroleum plunged to record lows by the end of that decade. A dramatic drop in product demand along with a crash in world oil prices affected most industries in the major group. In addition, growth was further hampered by the 1990-1991 recession, fuel-switching programs, and more energy efficient vehicles. 
+
+```{r}
+ggplot(Petro_Liquids_MotoGas, mapping = aes(Year, Motor_Gasoline)) + geom_point() + geom_smooth() + ggtitle('Motor Gasoline Production - Per Year')
+```
+Motor Gasoline 
+
+A complex mixture of low boiling hydrocarbons form motor gasoline. Low boiling hydrocarbons usually cause vapor lock in engines and hence are not suitable for use in aircraft engines. “Motor gasoline has a lower octane rating than aviation gasoline.” (“Motor Gasoline - an overview | ScienceDirect Topics”) 
+There is a drastic increase in the production of motor gasoline between 1985-1987 after that we can see the production has been increasing gradually till 1994. 
+```{r}
+ggplot(Petro_Liquids_JetFuel, mapping = aes(Year, Jet_Fuel)) + geom_point() + geom_smooth() + ggtitle('Jet Fuel Production - Per Year')
+```
+Jet fuel 
+
+Jet fuel is a refined kerosene-based, clear, or straw-colored liquid that is primarily used to power turbine engines, such as turboprop and jet engines 
+
+Production of jet fuel has been drastically increased from 2700 – 4000 between 1985 – 1990, then it suddenly drops after that and gets up from 1994 onwards. 
+
+```{r}
+ggplot(Petro_Liquids_Kerosene, mapping = aes(Year, Kerosene)) + geom_point() + geom_smooth() + ggtitle('Kerosene Production - Per Year')
+```
+Kerosene 
+
+kerosene, also spelled kerosene, also called paraffin or paraffin oil, is a flammable hydrocarbon liquid often used as a fuel. Kerosene is typically pale yellow or colorless and has unpleasant characteristics of odor. 
+
+There is a sharp decrease in the production of kerosene between 1985 – 1990 could be due to in developed countries its use declined because of electrification. “However, in developing countries, kerosene use for cooking and lighting remains widespread.” (“Kerosene: a review of household uses and their hazards in low- and ...”) This review focuses on household kerosene uses, in developing countries, their associated emissions, and their hazards, and from 1990 onwards the production is moderately increasing at a lower rate. 
+
+```{r}
+ggplot(Petro_Liquids_DistFuel, mapping = aes(Year, Distillate_Fuel_Oil)) + geom_point() + geom_smooth() + ggtitle('Distillate Fuel Oil Production - Per Year')
+```
+Distillate fuel 
+
+Distillate fuel, also called tractor fuel, was a petroleum product that was commonly used to power North American agricultural tractors in the early and mid-twentieth century. The product was crudely refined, similar to kerosene chemically, but impure. 
+
+Production of Distillate fuel has seen an upward trend since the beginning of its usage from 1985 onwards as the production is increasing at a steady pace could be due to Changes in demand trends that have significantly reduced the patterns of seasonality in U.S. distillate markets. Historically, distillate use in the United States was highly seasonal due to its use as a home heating fuel. Over the past three decades, however, its use as a heating fuel has declined, the export of distillate fuels has increased, and its use as a transportation fuel has become the most vital component of demand. 
+
+```{r}
+ggplot(Petro_Liquids_ResFuel, mapping = aes(Year, Residual_Fuel_Oil)) + geom_point() + geom_smooth() + ggtitle('Residual Fuel Oil Production - Per Year')
+```
+Residual oil 
+
+Residual oil is the fuel oil that remains after valuable distillates such as gasoline have been removed from crude oil and is used in industry. 
+
+The production of residual oil slightly decreases between 1986-1987, then we can see a gradual increase from 1987 – 1990 after that the production of residual oil drastically drops down this could be due to Wells in water-drive and gas-cap drive reservoirs often producing at a constant rate until the encroaching water or expanding gas cap reaches the well, causing a sudden decline in oil production. 
+
+```{r}
+ggplot(Petro_Liquids_LPetroGas, mapping = aes(Year, Liquified_Petroleum_Gas)) + geom_point() + geom_smooth() + ggtitle('Production of Liquified Petroleum Gas - Per Year')
+```
+LPG (Liquefied Petroleum Gas) 
+
+Liquefied gas (LPG or LP gas) is a combustible gas that contains a flammable hydrocarbon gas mixture, especially propane, propylene, butene, isobutane, and n-butane. 
+
+There is a slight decrease in production from 1985-1990, after 1990 we can a gradual increase in production as the production goes from 2200-2800. This could be because the global demand for LPG has grown rapidly for many years. Much of this growth has occurred east of the Suez Canal, which has shifted international trade patterns. Weak economies in many nations, however, and soaring prices for LPG could slow demand during the next few years. 
+
+
+## Sea Ice
+This dataset containts information on the extent and area of the ice caps in the oceans in the last 40 or so years. Area is the total space of the ice, whereas the extent is the space it spans, covering the entire area, including holes, making it the whole area spanned.
+
+Sea ice area is the total region covered by ice while sea ice extent is defined as the area of ocean where at least 15 percent of the surface is frozen. Sea ice extent is preferred over area because of the following reasons:  
+
+The certainty in the accuracy of estimates has grown  
+
+Calculating sea ice area requires precise measurement using passive microwave sensors, but they tend to malfunction during the melt season, facing challenges in distinguishing between ocean water and surface meltwater. This leads to an underestimated level of sea ice concentration. 
+
+The measurement of sea ice extent tackles this issue by compiling an aggregate of the specific sensor values to better estimate the real picture and fill out any discrepancies. This is done in a comparable way to the K-nn Method of dealing with NA’s  
+
+Sea ice extent provides a zoomed-out view of the ice in the polar regions. 
+
+```{r include=FALSE}
+#Extent Northern Hemisphere
+Sea_Ice_NH_EX_file <- "Sea_Ice_NH_Extent.xlsx"
+Sea_Ice_NH_EX <- read_excel(Sea_Ice_NH_EX_file)
+Sea_Ice_NH_EX <- Sea_Ice_NH_EX %>%
+  rename('Year' = 1) %>%
+  select(-14) %>%
+  filter(Year >= 1980)
+
+#Extent Southern Hemisphere
+Sea_Ice_SH_EX_file <- "Sea_Ice_SH_Extent.xlsx"
+Sea_Ice_SH_EX <- read_excel(Sea_Ice_SH_EX_file)
+Sea_Ice_SH_EX <- Sea_Ice_SH_EX %>%
+  rename('Year' = 1) %>%
+  select(-14) %>%
+  filter(Year >= 1980)
+
+#Area Northern Hemisphere
+Sea_Ice_NH_A_file <- "Sea_Ice_NH_Area.xlsx"
+Sea_Ice_NH_A <- read_excel(Sea_Ice_NH_A_file)
+Sea_Ice_NH_A <- Sea_Ice_NH_A %>%
+  rename('Year' = 1) %>%
+  select(-14) %>%
+  filter(Year >= 1980)
+
+#Area Southern Hemisphere
+Sea_Ice_SH_A_file <- "Sea_Ice_SH_Area.xlsx"
+Sea_Ice_SH_A <- read_excel(Sea_Ice_SH_A_file)
+Sea_Ice_SH_A <- Sea_Ice_SH_A %>%
+  rename('Year' = 1) %>%
+  select(-14) %>%
+  filter(Year >= 1980)
+```
+Graphical Representation & Analysis of Sea Ice
+
+The change in the sea ice area and the sea ice extent directly impact the change in the sea levels as suggested in the article. The following graphs depict the change in the sea ice area and extent over the last 40 years in both the Northern and Southern hemispheres.  
+
+```{r}
+#Extent Northern Hemisphere
+ggplot(Sea_Ice_NH_EX, aes(Year, Annual)) + geom_smooth() + geom_point() + ggtitle("Sea Ice Extent - Northern Hemisphere")
+
+#Area Northern Hemisphere
+ggplot(Sea_Ice_NH_A, aes(Year, Annual)) + geom_smooth() + geom_point() + ggtitle('Sea Ice Area - Northern Hemisphere')
+
+```
+Northern Hemisphere
+
+Analyzing from the given data spanning over the years 1990 to 2022, in the northern hemisphere, we observe a common downward trend in both sea ice extent and sea ice area since 1996. This uniformity is continued when it surges in 2013, making that year one of the extreme outliers in both graphs. Both attributes begin falling steadily after the anomaly until 2020. 2021 and 2022 have witnessed giant leaps, recording the highest sea ice extent and area in over two decades.  
+
+```{r}
+#Extent Southern Hemisphere
+ggplot(Sea_Ice_SH_EX, aes(Year, Annual)) + geom_smooth() + geom_point() + ggtitle('Sea Ice Extent - Southern Hemisphere')
+
+#Area Southern Hemisphere
+ggplot(Sea_Ice_SH_A, aes(Year, Annual)) + geom_smooth() + geom_point() + ggtitle('Sea Ice Area - Southern Hemisphere')
+```
+Southern Hemishpere
+ 
+In the southern hemisphere, sea ice extent and area seem to have risen with a slight gradient for 30 years, despite myriad fluctuations, creating numerous outliers. One of the extreme outliers is the year 2014, when both quantities have peaked. A drastic fall is noted over the next three years. They increase gradually until 2020, saturate in 2021 and face a dwindling drop in 2022. 
+
+
+## Conclusion 
+
+This project aimed to find a link between global emissions and sea levels. As Visualized by the graphs above, the production of biofuel, coal, and coke, natural gas, and Petro-liquids have all increased in addition to electricity and other primary sources of energy. 
+
+By looking at data from 1980 till 2020, the general trend suggests a slight rise from 1980 then a sudden dip until the early 2000s, following the turn of the 21st century the production of almost all sources of energy has exponentially increased. There are several factors that caused these rises, from the growing global population, increasing energy demand to the discovery of more efficient techniques producing energy at a faster rate and thus consuming more materials. The caveat of a growing population is the energy requirements, simply put more people require more energy. The rise in the production of energy results in a rise in emissions, as all methods of production leave behind waste; this waste, either solid liquid or gas eventually ends up back in the atmosphere in the form of natural gas. These natural gases in turn cause the greenhouse effect. The greenhouse effect is the primary reason for the rapid global rise in temperature, known as global warming. As introduced by the article, this rise in global temperature causes the melting of the ice caps. To test this hypothesis, for the project we analyzed the polar ice caps both in the North and South pole. Looking at the geographic area (size) and extent (aggregate of size) of the ice caps over the years. The graphs above suggest that over the last 40 years the polar ice caps have been melting, with the largest amount of decrease/melt in the last decade. The melting of the ice caps results in a large volume of water being dumped into the ocean, although vast, the overall oceanic volume is delicate and constrained. Metaphorically, picture all the world’s ocean to be a bathtub with a large chunk of ice in the middle, now as the ice melts, more water is produced; if the ice continues to melt, the tub will eventually overflow. This is the issue the world is currently facing, and our project confirms this notion through the analysis of energy production and sea ice. As mentioned in the article, a rise in sea level would be catastrophic for most if not all the world’s coastal regions. However, in the past few years the rate of emissions has decreased, and the usage of renewable energy has increased, resulting in the amount of sea ice growing (in the northern hemisphere). This suggests that, through constant social awareness and policy changes, the world is taking note of this issue and working towards a more sustainable future.  
+
+
+## Appendix 
+
+References 
+
+Abbasi, H. A., Khinkis, M. J., Penterson, C. A., Zone, F., Dunnette, R., Nakazato, K., Duggan, P. A., & Linz, D. G. (1991, January 1). Development of natural gas injection technology for NO sub x reduction from municipal waste combustors. www.osti.gov.https://www.osti.gov/servlets/purl/6246452 
+
+Archive: Energy from renewable sources. (n.d.). Ec.europa.eu. Retrieved December 13, 2022, from https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Archive:Energy_from_renewable_sources&oldid=330611 
+
+Chen, J. (2019). Crude Oil. Investopedia. https://www.investopedia.com/terms/c/crude-oil.asp 
+
+Electricity generation, capacity, and sales in the United States - U.S. Energy Information Administration (EIA). (2021, March 18). Eia.gov. https://www.eia.gov/energyexplained/electricity/electricity-in-the-us-generation-capacity-and-sales.php 
+
+Ethanol vs. Petroleum-Based Fuel Carbon Emissions. (n.d.). Energy.gov. https://www.energy.gov/eere/bioenergy/articles/ethanol-vs-petroleum-based-fuel-carbon-emissions 
+
+Fernando, J. (2021, December 5). Hydrocarbon Definition. Investopedia. https://www.investopedia.com/terms/h/hydrocarbon.asp 
+
+Glossary - U.S. Energy Information Administration (EIA). (n.d.). Www.eia.gov. Retrieved December 13, 2022, from https://www.eia.gov/tools/glossary/index.php?id=Lease#:~:text=Lease%20condensate%3A%20Light%20liquid%20hydrocarbons 
+
+in. (2019). US oil production up 134% in last 11 years. Aa.com.tr. https://www.aa.com.tr/en/economy/us-oil-production-up-134-in-last-11-years/1896901 
+
+Lehman, C. (2018). biofuel | Definition, Types, & Pros and Cons. In Encyclopedia Britannica. https://www.britannica.com/technology/biofuel 
+
+Liquefied petroleum gas. (2021, February 14). Wikipedia. https://en.wikipedia.org/wiki/Liquefied_petroleum_gas 
+
+Merriam-Webster Dictionary. (2022, November 29). Merriam-Webster.com. https://www.merriam-webster.com/dictionary/residual%20oil#:~:text=noun 
+
+Motor Gasoline - an overview | ScienceDirect Topics. (n.d.). Www.sciencedirect.com. Retrieved December 13, 2022, from https://www.sciencedirect.com/topics/engineering/motor-gasoline#:~:text=Motor%20gasoline%20is%20a%20complex 
+
+National Geographic. (2022a, May 20). Hydroelectric Energy | National Geographic Society. Education.nationalgeographic.org. https://education.nationalgeographic.org/resource/hydroelectric-energy 
+
+National Geographic. (2022b, June 2). Petroleum | National Geographic Society. Education.nationalgeographic.org. https://education.nationalgeographic.org/resource/petroleum 
+
+Nhede, N. (2021, August 30). Europe shows downward trend in coal production and usage. Power Engineering International. https://www.powerengineeringint.com/coal-fired/europe-shows-downward-trend-in-coal-production-and-usage/ 
+
+Office of Energy Efficiency & Renewable Energy. (2014). How Hydropower Works. Energy.gov. https://www.energy.gov/eere/water/how-hydropower-works 
+
+Office of Energy Efficiency & Renewable Energy. (2021). Biofuel Basics. Energy.gov; Office of ENERGY EFFICIENCY & RENEWABLE ENERGY. https://www.energy.gov/eere/bioenergy/biofuel-basics 
+
+Plumer, B. (2014, August 1). The rise and fall of nuclear power, in 6 charts. Vox. https://www.vox.com/2014/8/1/5958943/nuclear-power-rise-fall-six-charts 
+
+Rutledge, K. (2022, May 20). Nuclear Energy. Education.nationalgeographic.org; National Geographic. https://education.nationalgeographic.org/resource/nuclear-energy 
+
+Seasonal swings in U.S. distillate inventories lower as consumption patterns change. (n.d.). Www.eia.gov. Retrieved December 13, 2022, from https://www.eia.gov/todayinenergy/detail.php?id=32732 
+
+Staff, R. (2016, January 19). UPDATE 1-China 2015 coal output drops 3.5 pct on soft demand, pollution curbs. Reuters. https://www.reuters.com/article/china-economy-output-coal-idUSL3N1531CD 
+
+The Editors of Encyclopedia Britannica. (2016). Kerosene | chemical compound. In Encyclopædia Britannica. https://www.britannica.com/science/kerosene 
+
+Turgeon, A., & Morse, E. (2022a, May 20). Natural Gas | National Geographic Society. Education.nationalgeographic.org. https://education.nationalgeographic.org/resource/natural-gas 
+
+Turgeon, A., & Morse, E. (2022b, July 30). Coal | National Geographic Society. Education.nationalgeographic.org; National Geographic Society. https://education.nationalgeographic.org/resource/coal 
+
+U.S. Energy Information Administration. (2016). Electricity explained - U.S. Energy Information Administration (EIA). Eia.gov. https://www.eia.gov/energyexplained/electricity/ 
+
+United States Environmental Protection Agency. (2019, February 15). Energy Recovery from the Combustion of Municipal Solid Waste (MSW) | US EPA. US EPA. https://www.epa.gov/smm/energy-recovery-combustion-municipal-solid-waste-msw 
+
+What Are the Different Types of Aviation Fuel? (2021, November 18). National Aviation Academy. https://www.naa.edu/aviation-fuel/ 
+
+What is the difference between sea ice area and extent? (n.d.). National Snow and Ice Data Center. Retrieved December 13, 2022, from https://nsidc.org/learn/ask-scientist/what-difference-between-sea-ice-area-and-extent 
+
+ 
