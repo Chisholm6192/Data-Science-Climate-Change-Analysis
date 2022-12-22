@@ -8,3 +8,5 @@ Final Project RMD(1) is the final output document, with the analysis of the data
 Data100 questions is the outline of the project
 
 The other files are the excel files needed for the data
+
+Written in R, using RStudio and the Tidyverse library
