@@ -3,12 +3,6 @@ title: "DATA100_Final_Project"
 date: "`r Sys.Date()`"
 output: html_document
 ---
-Team Name: R Masters
-
-Team Members and Student ID:
-Last Name   First Name    Student ID
-Jiwani      Asad          169020794
-Chisholm    Ryan          169027577
 
 
 ```{r setup, include=FALSE}
