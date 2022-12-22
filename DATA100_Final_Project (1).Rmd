@@ -1,6 +1,5 @@
 ---
 title: "DATA100_Final_Project"
-author: "Jean, Ryan, Aryan, Asad, Harshita, Vishal"
 date: "`r Sys.Date()`"
 output: html_document
 ---
