@@ -1,0 +1,1554 @@
+---
+title: "DATA100_Final_Project"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(maps)
+library(readr)
+library(purrr)
+```
+
+#Bio Fuel
+This dataset contains the amount of BioFuel produced, there is a total amount, as well as individual values for certain particular usages, only the data from 1980 onwards is being considered
+
+File Loading
+```{r}
+#Biofuel file
+BioFuel_file <- "INT-Export-BioFuel-09-09-2022_22-28-53.csv"
+BioFuel_usage <- read_csv(BioFuel_file, skip = 1)
+BioFuel_usage <- BioFuel_usage %>%
+  rename('Type' = 2)
+#Run this entire chunk to reload Dataset
+```
+
+Tidying
+```{r}
+#tidying function
+tidying <- function(var){ #pass in the column you are pulling values from as parameter
+  add <- 'N/A' #default entry is N/A
+  if (var != 'Production (Mmt)' & var != 'Fuel ethanol (Mmt)' & var != 'Biomass-based diesel (Mmt)' & var != 'Consumption (Mmt)'){ #if it is not an energy usage type, therefore it is a country
+    add <- var #add the country
+  }
+  return(add)
+}
+
+BioFuel_usage <- mutate(BioFuel_usage, 'Region' = tidying(BioFuel_usage$Type[1])) #create region column
+
+#while loop to call the function and put all the returned country values into Region column
+i <- 1
+while(i < length(BioFuel_usage$Type)){ 
+  BioFuel_usage$Region[i] <- tidying(BioFuel_usage$Type[i])
+  i <- i + 1
+}
+
+#replace empty region entries with the country that is above it, ie the country that is in that section of data
+j <- 1
+while(j < length(BioFuel_usage$Region)){
+  if(BioFuel_usage$Region[j] != 'N/A' & BioFuel_usage$Region[j+1] == 'N/A'){
+    BioFuel_usage$Region[j+1] = BioFuel_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+#Function to sort the entries by Production and Consumption of Emissions
+Usage <- function(var){
+  add <- 'N/A'
+  if (var == 'Production (Mmt)'){
+    add <- 'Production'
+  }
+  else if(var == 'Consumption (Mmt)'){
+    add <- 'Consumption'
+  }
+  return(add)
+}
+
+BioFuel_usage <- mutate(BioFuel_usage, 'Usage' = Usage(BioFuel_usage$Type[1])) #Create the Usage type column
+
+i <- 1
+while (i < length(BioFuel_usage$Type)){
+  BioFuel_usage$Usage[i] = Usage(BioFuel_usage$Type[i])
+  i <- i + 1
+} #sort into columns
+
+j <- 1
+while (j < length(BioFuel_usage$Usage)){
+  if (BioFuel_usage$Usage[j] != 'N/A' & BioFuel_usage$Usage[j+1] == 'N/A'){
+    BioFuel_usage$Usage[j+1] = BioFuel_usage$Usage[j]
+  }
+  j <- j + 1
+}
+#replace unfound values with the entries around it, for usage type
+
+
+#get rid of all countries and usage types still in the main Bio Fuel Type column
+i <- 1
+while (i < length(BioFuel_usage$API)){
+  if (is.na(BioFuel_usage$API[i]) == TRUE){
+    is.na(BioFuel_usage$Region[i]) = TRUE
+    is.na(BioFuel_usage$Usage[i]) = TRUE
+    is.na(BioFuel_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+BioFuel_tidy <- BioFuel_usage %>% #arranging columns
+  select(API, Region, Usage, everything())
+
+BioFuel_tidy
+```
+
+Filtering and Plotting
+```{r}
+BioFuel_tidy <- BioFuel_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+#find only the values for the entire world, and the Production amounts
+
+#Total Bio Fuel Produced
+BioFuel_Production <- BioFuel_tidy %>%
+  filter(API == 'INTL.79-1-WORL-MT.A') #total production API
+
+BioFuel_Production <- BioFuel_Production %>%
+  select('1980':'2019') %>% #only take values from 1980 onwards
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Production') %>% #isolate to just two columns, year and amount produced(production)
+  mutate_if(is.character,as.double) #change all values to double
+  
+ggplot(BioFuel_Production, mapping = aes(Year, Production)) + geom_point() + geom_smooth() +ggtitle('Total Bio Fuel Production - Per Year')
+
+
+
+#Total Fuel Ethanol Produced
+BioFuel_Ethanol <- BioFuel_tidy %>%
+  filter(API == 'INTL.80-1-WORL-MT.A') #Fuel Ethanol Production API
+  
+BioFuel_Ethanol <- BioFuel_Ethanol %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Ethanol') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(BioFuel_Ethanol, mapping = aes(Year, Ethanol)) + geom_point() + geom_smooth() + ggtitle('Total Ethanol Produced - Per Year')
+
+
+#Biomass Based Diesel
+BioFuel_BiomassBasedDiesel <- BioFuel_tidy %>%
+  filter(API == 'INTL.81-1-WORL-MT.A') #Bio Mass Based Diesel Production API
+
+BioFuel_BiomassBasedDiesel <- BioFuel_BiomassBasedDiesel %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Biomass_Based_Diesel') %>%
+  mutate_if(is.character, as.double)
+
+ggplot(BioFuel_BiomassBasedDiesel, mapping = aes(Year, Biomass_Based_Diesel)) + geom_point() + geom_smooth() + ggtitle('Biomass Based Diesel Production - Per Year')
+
+```
+
+
+
+
+
+
+#Coal Coke
+This dataset contains the amount of Coal and Coke related combustion substances produced, only data from 1980 onwards is considered.
+
+File Loading
+```{r}
+#CoalCoke File
+CC_file <- "INT-Export-CoalCoke-09-09-2022_23-09-12.csv"
+CoalCoke_usage <- read_csv(CC_file, skip = 1)
+CoalCoke_usage <- CoalCoke_usage %>%
+  rename('Type' = 2)
+```
+
+Tidying
+```{r}
+#Regions tidying function
+Countries <- function(var){ #pass in the column you are pulling values from as parameter
+  add <- 'N/A' #default entry is N/A
+  if (var != 'Production' & var != 'Coal (Mst)' & var != 'Anthracite (Mst)' & var != 'Metallurgical coal (Mst)' & var != 'Bituminous (Mst)' & var != 'Subbituminous (Mst)' & var != 'Lignite (Mst)' & var != 'Metallurgical coke (Mst)' & var != 'Consumption' & var != 'Imports' & var != 'Exports' & var != 'Reserves' & var != 'Coal (million st)' & var != 'Emissions (MMtonnes CO2)'){ #if it is not an energy usage type, therefore it is a country
+    add <- var #add the country
+    #replace_with_na(replace = var)
+  }
+  return(add)
+}
+
+CoalCoke_usage <- mutate(CoalCoke_usage, 'Region' = Countries(CoalCoke_usage$Type[1]))
+
+i <- 1
+while (i < length(CoalCoke_usage$Type)){
+  CoalCoke_usage$Region[i] <- Countries(CoalCoke_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while(j < length(CoalCoke_usage$Region)){
+  if (CoalCoke_usage$Region[j] != 'N/A' & CoalCoke_usage$Region[j+1] == 'N/A'){
+    CoalCoke_usage$Region[j+1] = CoalCoke_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+#Usage tidying function
+Usage <- function(var){
+  add <- 'N/A'
+  if(var == 'Production' | var == 'Consumption' | var == 'Imports' | var == 'Exports' | var == 'Reserves'){
+    add <- var
+  }
+  return(add)
+}
+
+CoalCoke_usage <- mutate(CoalCoke_usage, 'Usage' = Usage(CoalCoke_usage$Type[1]))
+
+i <- 1
+while(i < length(CoalCoke_usage$Type)){
+  CoalCoke_usage$Usage[i] <- Usage(CoalCoke_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while(j < length(CoalCoke_usage$Usage)){
+  if (CoalCoke_usage$Usage[j] != 'N/A' & CoalCoke_usage$Usage[j+1] == 'N/A'){
+    CoalCoke_usage$Usage[j+1] = CoalCoke_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+
+i <- 1
+while (i < length(CoalCoke_usage$API)){
+  if (is.na(CoalCoke_usage$API[i]) == TRUE){
+    is.na(CoalCoke_usage$Region[i]) = TRUE
+    is.na(CoalCoke_usage$Usage[i]) = TRUE
+    is.na(CoalCoke_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+
+CoalCoke_tidy <- CoalCoke_usage %>%
+  select(API, Region,Usage, everything())
+
+
+
+CoalCoke_tidy
+```
+
+Filtering and Plotting
+```{r}
+CoalCoke_tidy <- CoalCoke_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+#Coal Production
+CoalCoke_Coal <- CoalCoke_tidy %>%
+  filter(API == 'INTL.7-1-WORL-TST.A')
+
+CoalCoke_Coal <- CoalCoke_Coal %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Coal') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(CoalCoke_Coal, mapping = aes(Year, Coal)) + geom_point() + geom_smooth() + ggtitle('Coal Production - Per Year')
+
+
+#Anthracite Production
+CoalCoke_Anthracite <- CoalCoke_tidy %>%
+  filter(API == 'INTL.11-1-WORL-TST.A')
+
+CoalCoke_Anthracite <- CoalCoke_Anthracite %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Anthracite') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(CoalCoke_Anthracite, mapping = aes(Year, Anthracite)) + geom_point() + geom_smooth() + ggtitle('Anthracite Produced - Per Year')
+
+
+#Metallurgical Coal Production
+CoalCoke_MetallurgicalCoal <- CoalCoke_tidy %>%
+  filter(API == 'INTL.130-1-WORL-TST.A')
+
+CoalCoke_MetallurgicalCoal <- CoalCoke_MetallurgicalCoal %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Metallurgical_Coal') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(CoalCoke_MetallurgicalCoal, mapping = aes(Year, Metallurgical_Coal)) + geom_point() + geom_smooth() + ggtitle('Metallurgical Coal Produced - Per Year')
+
+
+#Bituminous Coal Production
+CoalCoke_Bituminous <- CoalCoke_tidy %>%
+  filter(API == 'INTL.12-1-WORL-TST.A')
+
+CoalCoke_Bituminous <- CoalCoke_Bituminous %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Bituminous') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(CoalCoke_Bituminous, mapping = aes(Year, Bituminous)) + geom_point() + geom_smooth() + ggtitle('Bituminous Coal Produced - Per Year')
+
+
+#Subbituminous Coal Production
+CoalCoke_Subbituminous <- CoalCoke_tidy %>%
+  filter(API == 'INTL.119-1-WORL-TST.A')
+
+CoalCoke_Subbituminous <- CoalCoke_Subbituminous %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Subbituminous') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(CoalCoke_Subbituminous, mapping = aes(Year, Subbituminous)) + geom_point() + geom_smooth() + ggtitle('Subbituminous Coal Produced - Per Year')
+
+
+#Lignite Production
+CoalCoke_Lignite <- CoalCoke_tidy %>%
+  filter(API == 'INTL.14-1-WORL-TST.A')
+
+CoalCoke_Lignite <- CoalCoke_Lignite %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Lignite') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(CoalCoke_Lignite, mapping = aes(Year, Lignite)) + geom_point() + geom_smooth() + ggtitle('Lignite Produced - Per Year')
+
+
+
+#Metallurgical Coke Production
+CoalCoke_MetallurgicalCoke <- CoalCoke_tidy %>%
+  filter(API == 'INTL.21-1-WORL-TST.A')
+
+CoalCoke_MetallurgicalCoke <- CoalCoke_MetallurgicalCoke %>%
+  select('1980':'2020') %>%
+  pivot_longer('1980':'2020', names_to = 'Year', values_to = 'Metallurgical_Coke') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(CoalCoke_MetallurgicalCoke, mapping = aes(Year, Metallurgical_Coke)) + geom_point() + geom_smooth() + ggtitle('Metallurgical Coke Produced - per Year')
+
+```
+
+
+
+#Electricity
+This dataset shows the electricity used and produced each year and what type of energy is being produced or used
+
+File Loading
+```{r}
+#Electricity File
+Electricity_file <- "INT-Export-Electricity-09-09-2022_23-11-57.csv"
+Electricity_usage <- read_csv(Electricity_file, skip = 1)
+Electricity_usage <- Electricity_usage %>%
+  rename('Type' = 2)
+```
+
+Tidying
+```{r}
+tidying <- function(var){
+  add <- 'N/A'
+  if (var != 'Generation (billion kWh)' & var != 'Nuclear (billion kWh)' & var != 'Fossil fuels (billion kWh)' & var != 'Renewables (billion kWh)' & var != 'Hydroelectricity (billion kWh)' & var != 'Non-hydroelectric renewables (billion kWh)' & var != 'Geothermal (billion kWh)' & var != 'Solar, tide, wave, fuel cell (billion kWh)' & var != 'Tide and wave (billion kWh)' & var != 'Solar (billion kWh)' & var != 'Wind (billion kWh)' & var != 'Biomass and waste (billion kWh)' & var != 'Hydroelectric pumped storage (billion kWh)' & var != 'Consumption (billion kWh)' & var != 'Imports (billion kWh)' & var != 'Exports (billion kWh)' & var != 'Net imports (billion kWh)' & var != 'Capacity (million kW)' & var != 'Nuclear (million kW)'  & var != 'Fossil fuels (million kW)'  & var != 'Renewables (million kW)'  & var != 'Hydroelectricity (million kW)'  & var != 'Non-hydroelectric renewables (million kW)'  & var != 'Geothermal (million kW)'  & var != 'Solar, tide, wave, fuel cell (million kW)'  & var != 'Tide and wave (million kW)'  & var != 'Solar (million kW)'  & var != 'Wind (million kW)'  & var != 'Biomass and waste (million kW)'  & var != 'Hydroelectric pumped storage (million kW)' & var != 'Distribution losses (billion kWh)'){ #Hardcoding to find whether the value is a Country or not
+    add <- var
+  }
+  return(add)
+}
+
+Electricity_usage <- mutate(Electricity_usage, 'Region' = tidying(Electricity_usage$Type[1]))
+
+i <- 1
+while (i < length(Electricity_usage$Type)){
+  Electricity_usage$Region[i] = tidying(Electricity_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Electricity_usage$Region)){
+  if (Electricity_usage$Region[j] != 'N/A' & Electricity_usage$Region[j+1] == 'N/A'){
+    Electricity_usage$Region[j+1] = Electricity_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+Usage <- function(var){
+  add <- 'N/A'
+  if (var == 'Generation (billion kWh)'){
+    add <- 'Generation'
+  }
+  else if(var == 'Consumption (billion kWh)'){
+    add <- 'Consumption'
+  }
+  return(add)
+}
+
+Electricity_usage <- mutate(Electricity_usage, 'Usage' = Usage(Electricity_usage$Type[1]))
+
+i <- 1
+while (i < length(Electricity_usage$Type)){
+  Electricity_usage$Usage[i] = Usage(Electricity_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Electricity_usage$Usage)){
+  if (Electricity_usage$Usage[j] != 'N/A' & Electricity_usage$Usage[j+1] == 'N/A'){
+    Electricity_usage$Usage[j+1] = Electricity_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Electricity_usage$API)){
+  if (is.na(Electricity_usage$API[i]) == TRUE){
+    is.na(Electricity_usage$Region[i]) = TRUE
+    is.na(Electricity_usage$Usage[i]) = TRUE
+    is.na(Electricity_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+Electricity_tidy <- Electricity_usage %>%
+  select(API, Region, Usage, everything())
+
+Electricity_tidy
+```
+
+Filtering and Plotting
+```{r}
+Electricity_tidy <- Electricity_tidy %>%
+  filter(Region == 'World', Usage == 'Generation')
+
+#Total Electricity Generation
+Electricity_Generation <- Electricity_tidy %>%
+  filter(API == 'INTL.2-12-WORL-BKWH.A')
+
+Electricity_Generation <- Electricity_Generation %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Total_Generation') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_Generation, mapping = aes(Year, Total_Generation)) + geom_point() + geom_smooth() + ggtitle('Total Electricity Generated - Per Year')
+
+
+#Nuclear Power Production
+Electricity_Nuclear <- Electricity_tidy %>%
+  filter(API == 'INTL.27-12-WORL-BKWH.A')
+
+Electricity_Nuclear <- Electricity_Nuclear %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Nuclear') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_Nuclear, mapping = aes(Year, Nuclear)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Nuclear Power - Per Year')
+
+
+
+
+#Electricity Generated by Fossil Fuels
+Electricity_FossilFuels <- Electricity_tidy %>%
+  filter(API == 'INTL.28-12-WORL-BKWH.A')
+
+Electricity_FossilFuels <- Electricity_FossilFuels %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Fossil_Fuels') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_FossilFuels, mapping = aes(Year, Fossil_Fuels)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Fossil Fuels - Per Year')
+
+
+
+#Electricity Generated from Renewable sources
+Electricity_Renewables <- Electricity_tidy %>%
+  filter(API == 'INTL.29-12-WORL-BKWH.A')
+
+Electricity_Renewables<- Electricity_Renewables %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Renewables') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_Renewables, mapping = aes(Year, Renewables)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Renewable Sources - Per Year')
+
+
+
+#HydroElectricity
+Electricity_Hydroelectricity <- Electricity_tidy %>%
+  filter(API == 'INTL.33-12-WORL-BKWH.A')
+
+Electricity_Hydroelectricity<- Electricity_Hydroelectricity %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'HydroElectricity') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_Hydroelectricity, mapping = aes(Year, HydroElectricity)) + geom_point() + geom_smooth() + ggtitle('HydroElectricity Generated - Per Year')
+
+
+
+#Non HydroElectric Renewables
+Electricity_NonHydro <- Electricity_tidy %>%
+  filter(API == 'INTL.34-12-WORL-BKWH.A')
+
+Electricity_NonHydro<- Electricity_NonHydro %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Non_HydroElectric_Renewables') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_NonHydro, mapping = aes(Year, Non_HydroElectric_Renewables)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Renewable Sources, Excluding Hydro - Per Year')
+
+
+
+#Geothermal
+Electricity_Geothermal <- Electricity_tidy %>%
+  filter(API == 'INTL.35-12-WORL-BKWH.A')
+
+Electricity_Geothermal <- Electricity_Geothermal %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Geothermal') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_Geothermal, mapping = aes(Year, Geothermal)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Geothermal Energy - Per Year')
+
+
+
+#Solar, tide, wave, fuel cell 
+Electricity_SolarTidalWaveFuel <- Electricity_tidy %>%
+  filter(API == 'INTL.36-12-WORL-BKWH.A')
+
+Electricity_SolarTidalWaveFuel <- Electricity_SolarTidalWaveFuel %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Solar_Tidal_Wave_FuelCell') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_SolarTidalWaveFuel, mapping = aes(Year, Solar_Tidal_Wave_FuelCell)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Solar, Tide, Wave and Fuel Cells - Per Year')
+
+
+
+#Tide and Wave
+Electricity_TideWave <- Electricity_tidy %>%
+  filter(API == 'INTL.117-12-WORL-BKWH.A')
+
+Electricity_TideWave <- Electricity_TideWave %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Tide_Wave') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_TideWave, mapping = aes(Year, Tide_Wave)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Tide and Wave - Per Year')
+
+
+
+#Solar
+Electricity_Solar <- Electricity_tidy %>%
+  filter(API == 'INTL.116-12-WORL-BKWH.A')
+
+Electricity_Solar <- Electricity_Solar %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Solar') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_Solar, mapping = aes(Year, Solar)) + geom_point() + geom_smooth() + ggtitle('Electrcity Generated from Solar Power - Per Year')
+
+
+
+
+#Wind
+Electricity_Wind <- Electricity_tidy %>%
+  filter(API == 'INTL.37-12-WORL-BKWH.A')
+
+Electricity_Wind <- Electricity_Wind %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Wind') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_Wind, mapping = aes(Year, Wind)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Wind Power - Per Year')
+
+
+
+#Biomass Waste
+Electricity_BiomassWaste <- Electricity_tidy %>%
+  filter(API == 'INTL.38-12-WORL-BKWH.A')
+
+Electricity_BiomassWaste <- Electricity_BiomassWaste %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Biomass_Waste') %>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_BiomassWaste, mapping = aes(Year, Biomass_Waste)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Organic Waste - Per Year')
+
+
+
+#HydroElectric Pumped Storage
+Electricity_HydroPumped <- Electricity_tidy %>%
+  filter(API == 'INTL.82-12-WORL-BKWH.A')
+
+Electricity_HydroPumped <- Electricity_HydroPumped %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'HydroElectric_Pumped_Storage')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Electricity_HydroPumped, mapping = aes(Year, HydroElectric_Pumped_Storage)) + geom_point() + geom_smooth() + ggtitle('Electricity Generated from Hydroelectric Pumps - Per Year')
+```
+
+
+
+
+#Hydrocarbon
+This dataset contains data on different types of Hydrocarbons and their production and consumption, only data form 1980 onwards is considered
+
+File Loading
+```{r}
+#HydroCarbon File
+Hydrocarbon_file <- 'INT-Export-HydroCarbonLiquids-09-09-2022_23-14-09.csv'
+Hydrocarbon_usage <- read_csv(Hydrocarbon_file, skip = 1)
+Hydrocarbon_usage <- Hydrocarbon_usage %>%
+  rename('Type' = 2) #fix unnamed columns
+```
+
+Tidying
+```{r}
+Countries <- function(var){
+  add <- 'N/A'
+  if (var != 'Production' & var != 'Liquefied petroleum gases and ethane (Mb/d)' & var != 'Liquefied petroleum gases and ethane (refinery) (Mb/d)' & var != 'Liquefied petroleum gases (nonrefinery) (Mb/d)' & var != 'Ethane (non refinery) (Mb/d)' & var != 'Consumption' & var != 'LPG (Mb/d)' & var != 'Ethane (Mb/d)' & var != 'Imports' & var != 'Exports'){
+    add <- var
+  }
+  return(add)
+}
+
+Hydrocarbon_usage <- mutate(Hydrocarbon_usage, 'Region' = Countries(Hydrocarbon_usage$Type[1]))
+
+i <- 1
+while (i < length(Hydrocarbon_usage$Type)){
+  Hydrocarbon_usage$Region[i] = Countries(Hydrocarbon_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Hydrocarbon_usage$Region)){
+  if (Hydrocarbon_usage$Region[j] != 'N/A' & Hydrocarbon_usage$Region[j+1] == 'N/A'){
+    Hydrocarbon_usage$Region[j+1] = Hydrocarbon_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+
+Usage <- function(var){
+  add <- 'N/A'
+  if (var == 'Production' | var == 'Consumption' | var == 'Imports' | var == 'Exports'){
+    add <- var
+  }
+  return(add)
+}
+
+Hydrocarbon_usage <- mutate(Hydrocarbon_usage, 'Usage' = Usage(Hydrocarbon_usage$Type[1]))
+
+i <- 1
+while (i < length(Hydrocarbon_usage$Type)){
+  Hydrocarbon_usage$Usage[i] = Usage(Hydrocarbon_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Hydrocarbon_usage$Usage)){
+  if (Hydrocarbon_usage$Usage[j] != 'N/A' & Hydrocarbon_usage$Usage[j+1] == 'N/A'){
+    Hydrocarbon_usage$Usage[j+1] = Hydrocarbon_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Hydrocarbon_usage$API)){
+  if (is.na(Hydrocarbon_usage$API[i]) == TRUE){
+    is.na(Hydrocarbon_usage$Region[i]) = TRUE
+    is.na(Hydrocarbon_usage$Usage[i]) = TRUE
+    is.na(Hydrocarbon_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+Hydrocarbon_tidy <- Hydrocarbon_usage %>%
+  select(API, Region, Usage, everything())
+
+
+Hydrocarbon_tidy
+```
+
+Filtering and Plotting
+```{r}
+Hydrocarbon_tidy<- Hydrocarbon_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+#For this dataset there is no data before 2006, they are all N/A values, so We will be skipping over them
+
+
+#Liquified Petroleum Gases and Ethane, Total
+Hydrocarbon_LiquifiedPetrol <- Hydrocarbon_tidy %>%
+  filter(API == 'INTL.13-1-WORL-TBPD.A')
+
+Hydrocarbon_LiquifiedPetrol <- Hydrocarbon_LiquifiedPetrol %>%
+  select('2006':'2014') %>%
+  pivot_longer('2006':'2014', names_to = 'Year', values_to = 'Liquified_Petroleum_Gases_and_Ethane_Total')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Hydrocarbon_LiquifiedPetrol, mapping = aes(Year, Liquified_Petroleum_Gases_and_Ethane_Total)) + geom_point() + geom_smooth() + ggtitle('Total Liquid Petroleum and Ethane Produced - Per Year')
+
+
+
+#Liquified Petroleum Gases and Ethane, from Refinery
+Hydrocarbon_LiquifidPetrol_Refine <- Hydrocarbon_tidy %>%
+  filter(API == 'INTL.6798-1-WORL-TBPD.A')
+
+Hydrocarbon_LiquifidPetrol_Refine <- Hydrocarbon_LiquifidPetrol_Refine %>%
+  select('2006':'2014') %>%
+  pivot_longer('2006':'2014', names_to = 'Year', values_to = 'Liquified_Petroleum_Gases_and_Ethane_Refinery')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Hydrocarbon_LiquifidPetrol_Refine, mapping = aes(Year, Liquified_Petroleum_Gases_and_Ethane_Refinery)) + geom_point() + geom_smooth() + ggtitle('Liquid Petroleum and Ethane Produced by Refineries - Per Year')
+
+
+
+
+#Liquified Petroleum Gases and Ethane, not from Refinery
+Hydrocarbon_LiquifidPetrol_NonRefine <- Hydrocarbon_tidy %>%
+  filter(API == 'INTL.6799-1-WORL-TBPD.A')
+
+Hydrocarbon_LiquifidPetrol_NonRefine <- Hydrocarbon_LiquifidPetrol_NonRefine %>%
+  select('2006':'2014') %>%
+  pivot_longer('2006':'2014', names_to = 'Year', values_to = 'Liquified_Petroleum_Gases_and_Ethane_Non_Refinery')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Hydrocarbon_LiquifidPetrol_NonRefine, mapping = aes(Year, Liquified_Petroleum_Gases_and_Ethane_Non_Refinery)) + geom_point() + geom_smooth() + ggtitle('Liquid Petroleum and Ethane, Not Produced by Refineries - Per Year')
+
+
+
+#Ethane alone, non refinery
+Hydrocarbon_Ethane <- Hydrocarbon_tidy %>%
+  filter(API == 'INTL.8399-1-WORL-TBPD.A')
+
+Hydrocarbon_Ethane <- Hydrocarbon_Ethane %>%
+  select('2006':'2014') %>%
+  pivot_longer('2006':'2014', names_to = 'Year', values_to = 'Ethane')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Hydrocarbon_Ethane, mapping = aes(Year, Ethane)) + geom_point() + geom_smooth() + ggtitle('Ethane Produced, Not from Refineries - Per Year')
+
+
+```
+
+
+
+#Natural Gas
+This dataset contains data about the produciton and consumption of Natural Gasses for creating energy and fuels, only data form 1980 onwards is considered
+
+File Loading
+```{r}
+#Natural Gas File
+Natural_Gas_file <- 'INT-Export-NaturalGas-09-09-2022_23-11-09.csv'
+Natural_Gas_usage <- read_csv(Natural_Gas_file, skip = 1)
+Natural_Gas_usage <- Natural_Gas_usage %>%
+  rename('Type' = 2)
+```
+
+Tidying
+```{r}
+Countries <- function(var){
+  add <- 'N/A'
+  if (var != 'Production' & var != 'Gross natural gas (bcf)' & var != 'Dry natural gas (bcf)' & var != 'Vented and flared natural gas (bcf)' & var != 'Reinjected natural gas (bcf)' & var != 'Consumption' & var != 'Imports' & var != 'Exports' & var != 'Reserves' & var != 'Gross natural gas (tcf)' & var != 'Emissions (MMtonnes CO2)'){
+    add <- var
+  }
+  return(add)
+}
+
+Natural_Gas_usage <- mutate(Natural_Gas_usage, 'Region' = Countries(Natural_Gas_usage$Type[1]))
+
+i <- 1
+while (i < length(Natural_Gas_usage$Type)){
+  Natural_Gas_usage$Region[i] = Countries(Natural_Gas_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Natural_Gas_usage$Region)){
+  if (Natural_Gas_usage$Region[j] != 'N/A' & Natural_Gas_usage$Region[j+1] == 'N/A'){
+    Natural_Gas_usage$Region[j+1] = Natural_Gas_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+
+Usage <- function(var){
+  add <- 'N/A'
+  if(var == 'Production' | var == 'Consumption' | var == 'Imports' | var == 'Exports' | var == 'Reserves'){
+    add <- var
+  }
+  return(add)
+}
+
+Natural_Gas_usage <- mutate(Natural_Gas_usage, 'Usage' = Usage(Natural_Gas_usage$Type[1]))
+
+i <- 1
+while (i < length(Natural_Gas_usage$Type)){
+  Natural_Gas_usage$Usage[i] = Usage(Natural_Gas_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Natural_Gas_usage$Usage)){
+  if (Natural_Gas_usage$Usage[j] != 'N/A' & Natural_Gas_usage$Usage[j+1] == 'N/A'){
+    Natural_Gas_usage$Usage[j+1] = Natural_Gas_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Natural_Gas_usage$API)){
+  if (is.na(Natural_Gas_usage$API[i]) == TRUE){
+    is.na(Natural_Gas_usage$Region[i]) = TRUE
+    is.na(Natural_Gas_usage$Usage[i]) = TRUE
+    is.na(Natural_Gas_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+
+Natural_Gas_tidy <- Natural_Gas_usage %>%
+  select(API, Region, Usage, everything())
+
+Natural_Gas_tidy
+```
+
+Filtering and Plotting
+```{r}
+Natural_Gas_tidy <- Natural_Gas_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+
+#Total Natural Gas
+Natural_Gas_Total <- Natural_Gas_tidy %>%
+  filter(API == 'INTL.3-1-WORL-BCF.A')
+
+Natural_Gas_Total <- Natural_Gas_Total %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Total_Natural_Gas')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Natural_Gas_Total, mapping = aes(Year, Total_Natural_Gas)) + geom_point() + geom_smooth() + ggtitle('Total Natural Gas Produced - Per Year')
+
+
+
+#Dry Natural Gas
+Natural_Gas_Dry <- Natural_Gas_tidy %>%
+  filter(API == 'INTL.26-1-WORL-BCF.A')
+
+Natural_Gas_Dry <- Natural_Gas_Dry %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Dry_Natural_Gas')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Natural_Gas_Dry, mapping = aes(Year, Dry_Natural_Gas)) + geom_point() + geom_smooth() + ggtitle('Dry Natural Gas Production - Per Year')
+
+
+#Vented and Flared Natural Gas
+Natural_Gas_VentedFlared <- Natural_Gas_tidy %>%
+  filter(API == 'INTL.43-1-WORL-BCF.A')
+
+Natural_Gas_VentedFlared <- Natural_Gas_VentedFlared %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Natural_Gas_Vented_and_Flared')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Natural_Gas_VentedFlared, mapping = aes(Year, Natural_Gas_Vented_and_Flared)) + geom_point() + geom_smooth() + ggtitle('Natural Gas Produced from Venting and Flaring - Per Year')
+
+
+
+#Reinjected Natural Gas
+Natural_Gas_Reinjected <- Natural_Gas_tidy %>%
+  filter(API == 'INTL.48-1-WORL-BCF.A')
+
+Natural_Gas_Reinjected <- Natural_Gas_Reinjected %>%
+  select('1980':'2021') %>%
+  pivot_longer('1980':'2021', names_to = 'Year', values_to = 'Reinjected_Natural_Gas')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Natural_Gas_Reinjected, mapping = aes(Year, Reinjected_Natural_Gas)) + geom_point() + geom_smooth() + ggtitle('Production of Reinjected Natural Gasses - Per Year')
+```
+
+
+
+
+#Primary Energy
+This dataset focusses on Primary Energy production and consumption, only data from 1980 onwards is considered.
+
+File Loading
+```{r}
+#Primary Energy File
+Primary_Energy_file <- 'INT-Export-PrimaryEnergy-09-09-2022_23-12-37.csv'
+Primary_Energy_usage <- read_csv(Primary_Energy_file, skip = 1)
+Primary_Energy_usage <- Primary_Energy_usage %>%
+  rename('Type' = 2)
+```
+
+Tidying
+```{r}
+tidying <- function(var){
+  add <- 'N/A'
+  if (var != 'Production (quad Btu)' & var != 'Coal (quad Btu)' & var != 'Natural gas (quad Btu)' & var != 'Petroleum and other liquids (quad Btu)' & var != 'Nuclear, renewables, and other (quad Btu)' & var != 'Nuclear (quad Btu)' & var != 'Renewables and other (quad Btu)' & var != 'Consumption (quad Btu)'){
+    add <- var
+  }
+  return(add)
+}
+
+Primary_Energy_usage <- mutate(Primary_Energy_usage, 'Region' = tidying(Primary_Energy_usage$Type[1]))
+
+i <- 1
+while (i < length(Primary_Energy_usage$Type)){
+  Primary_Energy_usage$Region[i] = tidying(Primary_Energy_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Primary_Energy_usage$Region)){
+  if (Primary_Energy_usage$Region[j] != 'N/A' & Primary_Energy_usage$Region[j+1] == 'N/A'){
+    Primary_Energy_usage$Region[j+1] = Primary_Energy_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+Usage <- function(var){
+  add <- 'N/A'
+  if (var == 'Production (quad Btu)'){
+    add <- 'Production'
+  }
+  else if(var == 'Consumption (quad Btu)'){
+    add <- 'Consumption'
+  }
+  return(add)
+}
+
+Primary_Energy_usage <- mutate(Primary_Energy_usage, 'Usage' = Usage(Primary_Energy_usage$Type[1]))
+
+i <- 1
+while (i < length(Primary_Energy_usage$Type)){
+  Primary_Energy_usage$Usage[i] = Usage(Primary_Energy_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Primary_Energy_usage$Usage)){
+  if (Primary_Energy_usage$Usage[j] != 'N/A' & Primary_Energy_usage$Usage[j+1] == 'N/A'){
+    Primary_Energy_usage$Usage[j+1] = Primary_Energy_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Primary_Energy_usage$API)){
+  if (is.na(Primary_Energy_usage$API[i]) == TRUE){
+    is.na(Primary_Energy_usage$Region[i]) = TRUE
+    is.na(Primary_Energy_usage$Usage[i]) = TRUE
+    is.na(Primary_Energy_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+Primary_Energy_tidy <- Primary_Energy_usage %>%
+  select(API, Region, Usage, everything())
+
+Primary_Energy_tidy
+
+```
+
+Filtering and Plotting
+```{r}
+Primary_Energy_tidy <- Primary_Energy_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+
+
+#Primary Energy Total Production
+Primary_Energy_Production <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.44-1-WORL-QBTU.A')
+
+Primary_Energy_Production <- Primary_Energy_Production %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Total_Production')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Primary_Energy_Production, mapping = aes(Year, Total_Production)) + geom_point() + geom_smooth() + ggtitle('Total Primary Energy Produced - Per Year')
+
+
+
+#Primary Energy Coal Production
+Primary_Energy_Coal <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4411-1-WORL-QBTU.A')
+
+Primary_Energy_Coal <- Primary_Energy_Coal %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Coal')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Primary_Energy_Coal, mapping = aes(Year, Coal)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Coal - Per Year')
+
+
+
+
+#Primary Energy Natural Gas
+Primary_Energy_Natural_Gas <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4413-1-WORL-QBTU.A')
+
+Primary_Energy_Natural_Gas <- Primary_Energy_Natural_Gas %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Natural_Gas_Primary_Energy')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Primary_Energy_Natural_Gas, mapping = aes(Year, Natural_Gas_Primary_Energy)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Natural Gasses - Per Year')
+
+
+
+#Petroleum and Other Liquids
+Primary_Energy_Petrol <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4415-1-WORL-QBTU.A')
+
+Primary_Energy_Petrol <- Primary_Energy_Petrol %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Petroleum_and_Other_Liquids')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Primary_Energy_Petrol, mapping = aes(Year, Petroleum_and_Other_Liquids)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Liquids - Per Year')
+
+
+
+#Nuclear, Renewables and Other
+Primary_Energy_Nuc_Renew_Other <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4419-1-WORL-QBTU.A')
+
+Primary_Energy_Nuc_Renew_Other <- Primary_Energy_Nuc_Renew_Other %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Nuclear_Renewable_Other')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Primary_Energy_Nuc_Renew_Other, mapping = aes(Year, Nuclear_Renewable_Other)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Nuclear and Renewable forms of Energy - Per Year')
+
+
+
+
+#Nuclear
+Primary_Energy_Nuclear <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4417-1-WORL-QBTU.A')
+
+Primary_Energy_Nuclear <- Primary_Energy_Nuclear %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Nuclear')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Primary_Energy_Nuclear, mapping = aes(Year, Nuclear)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Nuclear Power - Per Year')
+
+
+
+#Renewables and Other
+Primary_Energy_Renew_Other <- Primary_Energy_tidy %>%
+  filter(API == 'INTL.4418-1-WORL-QBTU.A')
+
+Primary_Energy_Renew_Other <- Primary_Energy_Renew_Other %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Renewables_and_Other')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Primary_Energy_Renew_Other, mapping = aes(Year, Renewables_and_Other)) + geom_point() + geom_smooth() + ggtitle('Primary Energy Produced from Renewables and Other Energy Sources - Per Year')
+```
+
+
+
+
+
+
+#Petro Liquids
+This dataset contains information for the production and consumption of Petroleum and other liquids, motor oil, jet fuel etc.
+
+File Loading
+```{r}
+Petro_Liquids_file <- 'INT-Export-PetroLiquids-09-09-2022_23-10-18.csv'
+Petro_Liquids_usage <- read_csv(Petro_Liquids_file, skip = 1)
+Petro_Liquids_usage <- Petro_Liquids_usage %>%
+  rename('Type' = 2)
+```
+
+Tidying
+```{r}
+Countries <- function(var){
+  add <- 'N/A'
+  if(var != 'Production' & var != 'Total petroleum and other liquids (Mb/d)' & var != 'Crude oil, NGPL, and other liquids (Mb/d)' & var != 'Crude oil including lease condensate (Mb/d)' & var != 'NGPL (Mb/d)' & var != 'Other liquids (Mb/d)' & var != 'Refinery processing gain (Mb/d)' & var != 'Refined petroleum products (Mb/d)' & var != 'Motor gasoline (Mb/d)' & var != 'Jet fuel (Mb/d)' & var != 'Kerosene (Mb/d)' & var != 'Distillate fuel oil (Mb/d)' & var != 'Residual fuel oil (Mb/d)' & var != 'Liquefied Petroleum Gases (Mb/d)' & var != 'Other petroleum liquids (Mb/d)' & var != 'Consumption (Mb/d)' & var != 'Imports' & var != 'Exports' & var != 'Reserves' & var != 'Crude oil including lease condensate (billion b)' & var != 'Bunker' & var != 'Emissions (MMtonnes CO2)'){
+    add <- var
+  }
+  return(add)
+}
+
+Petro_Liquids_usage <- mutate(Petro_Liquids_usage, 'Region' = Countries(Petro_Liquids_usage$Type[1]))
+
+i <- 1
+while (i < length(Petro_Liquids_usage$Type)){
+  Petro_Liquids_usage$Region[i] = Countries(Petro_Liquids_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Petro_Liquids_usage$Region)){
+  if (Petro_Liquids_usage$Region[j] != 'N/A' & Petro_Liquids_usage$Region[j+1] == 'N/A'){
+    Petro_Liquids_usage$Region[j+1] = Petro_Liquids_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+Usage <- function(var){
+  add <- 'N/A'
+  if(var == 'Production' | var == 'Imports' | var == 'Exports' | var == 'Reserves' | var == 'Bunker'){
+    add <- var
+  }
+  else if(var == 'Consumption (Mb/d)'){
+    var = 'Consumption'
+    add <- var
+  }
+  return(add)
+}
+
+Petro_Liquids_usage <- mutate(Petro_Liquids_usage, 'Usage' = Usage(Petro_Liquids_usage$Type[1]))
+
+i <- 1
+while (i < length(Petro_Liquids_usage$Type)){
+  Petro_Liquids_usage$Usage[i] = Usage(Petro_Liquids_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Petro_Liquids_usage$Usage)){
+  if (Petro_Liquids_usage$Usage[j] != 'N/A' & Petro_Liquids_usage$Usage[j+1] == 'N/A'){
+    Petro_Liquids_usage$Usage[j+1] = Petro_Liquids_usage$Usage[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Petro_Liquids_usage$API)){
+  if (is.na(Petro_Liquids_usage$API[i]) == TRUE){
+    is.na(Petro_Liquids_usage$Region[i]) = TRUE
+    is.na(Petro_Liquids_usage$Usage[i]) = TRUE
+    is.na(Petro_Liquids_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+Petro_Liquids_tidy <- Petro_Liquids_usage %>%
+  select(API, Region, Usage, everything())
+
+Petro_Liquids_tidy
+```
+
+Filtering and Plotting
+```{r}
+Petro_Liquids_tidy <- Petro_Liquids_tidy %>%
+  filter(Region == 'World', Usage == 'Production')
+
+#Total Petroleum and Other Liquids
+Petro_Liquids_Petroleum <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.53-1-WORL-TBPD.A')
+
+Petro_Liquids_Petroleum <- Petro_Liquids_Petroleum %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Petroleum_and_Other_Liquids')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_Petroleum, mapping = aes(Year, Petroleum_and_Other_Liquids)) + geom_point() + geom_smooth() + ggtitle('Total Petro Liquids Produced - Per Year')
+
+
+
+#Crude Oil, NPGL and other liquids
+Petro_Liquids_ManyLiquids <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.55-1-WORL-TBPD.A')
+
+Petro_Liquids_ManyLiquids <- Petro_Liquids_ManyLiquids %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Crude_Oil_NPGL_and_other_Liquids')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_ManyLiquids, mapping = aes(Year, Crude_Oil_NPGL_and_other_Liquids)) + geom_point() + geom_smooth() + ggtitle('Production of Crude Oil, NPGL and Other Liquids - Per Year')
+
+
+
+#Crude Oil, including Lease Condensate
+Petro_Liquids_Crude_Lease <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.57-1-WORL-TBPD.A')
+
+Petro_Liquids_Crude_Lease <- Petro_Liquids_Crude_Lease %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Crude_Oil_Including_Lease_Condensate')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_Crude_Lease, mapping = aes(Year, Crude_Oil_Including_Lease_Condensate)) + geom_point() + geom_smooth() + ggtitle('Production of Crude Oil, including Lease Condensate - Per Year')
+
+
+
+
+#NPGL
+Petro_Liquids_NPGL <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.58-1-WORL-TBPD.A')
+
+Petro_Liquids_NPGL <- Petro_Liquids_NPGL %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'NPGL')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_NPGL, mapping = aes(Year, NPGL)) + geom_point() + geom_smooth() + ggtitle('Total NPGL Production - Per Year')
+
+
+
+
+#Other Liquids
+Petro_Liquids_Other <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.59-1-WORL-TBPD.A')
+
+Petro_Liquids_Other <- Petro_Liquids_Other %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Other')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_Other, mapping = aes(Year, Other)) + geom_point() + geom_smooth() + ggtitle('Production of Other Petro-Liquids - Per Year')
+
+
+
+
+#Refinery Processing Gain
+Petro_Liquids_Refinery_Processing <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.56-1-WORL-TBPD.A')
+
+Petro_Liquids_Refinery_Processing <- Petro_Liquids_Refinery_Processing %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Refinery_Processing_Gain')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_Refinery_Processing, mapping = aes(Year, Refinery_Processing_Gain)) + geom_point() + geom_smooth() + ggtitle('Refinery Processing Gain - Per Year')
+
+
+
+
+#Refined Petroleum Products
+Petro_Liquids_Refined_Petroleum <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.54-1-WORL-TBPD.A')
+
+Petro_Liquids_Refined_Petroleum <- Petro_Liquids_Refined_Petroleum %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Refinery_Petroleum_Products')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_Refined_Petroleum, mapping = aes(Year, Refinery_Petroleum_Products)) + geom_point() + geom_smooth() + ggtitle('Production of Refined Petroleum Products - Per Year')
+
+
+
+
+#Motor Gasoline
+Petro_Liquids_MotoGas <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.62-1-WORL-TBPD.A')
+
+Petro_Liquids_MotoGas <- Petro_Liquids_MotoGas %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Motor_Gasoline')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_MotoGas, mapping = aes(Year, Motor_Gasoline)) + geom_point() + geom_smooth() + ggtitle('Motor Gasoline Production - Per Year')
+
+
+
+
+#Jet Fuel
+Petro_Liquids_JetFuel <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.63-1-WORL-TBPD.A')
+
+Petro_Liquids_JetFuel <- Petro_Liquids_JetFuel %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Jet_Fuel')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_JetFuel, mapping = aes(Year, Jet_Fuel)) + geom_point() + geom_smooth() + ggtitle('Jet Fuel Production - Per Year')
+
+
+
+#Kerosene
+Petro_Liquids_Kerosene <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.64-1-WORL-TBPD.A')
+
+Petro_Liquids_Kerosene <- Petro_Liquids_Kerosene %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Kerosene')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_Kerosene, mapping = aes(Year, Kerosene)) + geom_point() + geom_smooth() + ggtitle('Kerosene Production - Per Year')
+
+
+
+
+#Distillate Fuel Oil
+Petro_Liquids_DistFuel <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.65-1-WORL-TBPD.A')
+
+Petro_Liquids_DistFuel <- Petro_Liquids_DistFuel %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Distillate_Fuel_Oil')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_DistFuel, mapping = aes(Year, Distillate_Fuel_Oil)) + geom_point() + geom_smooth() + ggtitle('Distillate Fuel Oil Production - Per Year')
+
+
+
+
+#Residual Fuel Oil
+Petro_Liquids_ResFuel <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.66-1-WORL-TBPD.A')
+
+Petro_Liquids_ResFuel <- Petro_Liquids_ResFuel %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Residual_Fuel_Oil')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_ResFuel, mapping = aes(Year, Residual_Fuel_Oil)) + geom_point() + geom_smooth() + ggtitle('Residual Fuel Oil Production - Per Year')
+
+
+
+
+#Liquified Petroleum Gases
+Petro_Liquids_LPetroGas <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.67-1-WORL-TBPD.A')
+
+Petro_Liquids_LPetroGas <- Petro_Liquids_LPetroGas %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Liquified_Petroleum_Gas')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_LPetroGas, mapping = aes(Year, Liquified_Petroleum_Gas)) + geom_point() + geom_smooth() + ggtitle('Production of Liquified Petroleum Gas - Per Year')
+
+
+
+
+#Other Petroleum Liquids
+Petro_Liquids_Other_Liquids <- Petro_Liquids_tidy %>%
+  filter(API == 'INTL.68-1-WORL-TBPD.A')
+
+Petro_Liquids_Other_Liquids <- Petro_Liquids_Other_Liquids %>%
+  select('1980':'1994') %>%
+  pivot_longer('1980':'1994', names_to = 'Year', values_to = 'Other_Petroleum_Liquids')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Petro_Liquids_Other_Liquids, mapping = aes(Year, Other_Petroleum_Liquids)) + geom_point() + geom_smooth() + ggtitle('Production of Other Petro-Liquids - Per Year')
+```
+
+
+
+
+
+#Emissions
+This dataset measures the total emissions production for the different types of emissions in the datasets above, Bio Fuel, Petro Liquids, Electricity, Hydrocarbons etc.
+
+File Loading
+```{r}
+Emissions_file <- 'INT-Export-Emissions-09-09-2022_23-18-25.csv'
+Emissions_usage <- read_csv(Emissions_file, skip = 1)
+Emissions_usage <- Emissions_usage %>%
+  rename('API' = 1, 'Type' = 2, '1949' = 3, '1950' = 4, '1951' = 5, '1952' = 6, '1953' = 7, '1954' = 8, '1955' = 9, '1956' = 10, '1957' = 11, '1958' = 12, '1959' = 13, '1960' = 14, '1961' = 15, '1962' = 16, '1963' = 17, '1964' = 18, '1965' = 19, '1966' = 20, '1967' = 21, '1968' = 22, '1969' = 23, '1970' = 24, '1971' = 25, '1972' = 26, '1973' = 27, '1974' = 28, '1975' = 29, '1976' = 30, '1977' = 31, '1978' = 32, '1979' = 33, '1980' = 34, '1981' = 35, '1982' = 36, '1983' = 37, '1984' = 38, '1985' = 39, '1986' = 40, '1987' = 41, '1988' = 42, '1989' = 43, '1990' = 44, '1991' = 45, '1992' = 46, '1993' = 47, '1994' = 48, '1995' = 49, '1996' = 50, '1997' = 51, '1998' = 52, '1999' = 53, '2000' = 54, '2001' = 55, '2002' = 56, '2003' = 57, '2004' = 58, '2005' = 59, '2006' = 60, '2007' = 61, '2008' = 62, '2009' = 63, '2010' = 64, '2011' = 65, '2012' = 66, '2013' = 67, '2014' = 68, '2015' = 69, '2016' = 70, '2017' = 71, '2018' = 72, '2019' = 73) %>%
+  mutate_if(is.double, as.character)
+```
+
+Tidying
+```{r}
+Countries <- function(var){ 
+  add <- 'N/A'
+  if(var != 'Emissions' & var !='CO2 emissions (MMtonnes CO2)' & var != 'Coal and coke (MMtonnes CO2)' & var != 'Consumed natural gas (MMtonnes CO2)' & var != 'Petroleum and other liquids (MMtonnes CO2)'){
+    add <- var
+  }
+  return(add)
+}
+
+Emissions_usage <- mutate(Emissions_usage, 'Region' = Countries(Emissions_usage$Type[1]))
+
+i <- 1
+while (i < length(Emissions_usage$Type)){
+  Emissions_usage$Region[i] = Countries(Emissions_usage$Type[i])
+  i <- i + 1
+}
+
+j <- 1
+while (j < length(Emissions_usage$Region)){
+  if (Emissions_usage$Region[j] != 'N/A' & Emissions_usage$Region[j+1] == 'N/A'){
+    Emissions_usage$Region[j+1] = Emissions_usage$Region[j]
+  }
+  j <- j + 1
+}
+
+i <- 1
+while (i < length(Emissions_usage$Region)){
+  if (Emissions_usage$Region[i] == 'Zimbabwe' & Emissions_usage$Region[i+1] == 'World'){
+    Emissions_usage$Region[i+1] = 'Zimbabwe'
+  }
+  i <- i + 1
+}
+
+
+i <- 1
+while (i < length(Emissions_usage$API)){
+  if (is.na(Emissions_usage$API[i]) == TRUE){
+    is.na(Emissions_usage$Region[i]) = TRUE
+    is.na(Emissions_usage$Type[i]) = TRUE
+  }
+  i <- i + 1
+}
+
+Emissions_tidy <- Emissions_usage %>%
+  select(API, Region, everything())
+
+Emissions_tidy
+```
+
+Filtering and Plotting
+```{r}
+Emissions_tidy <- Emissions_tidy %>%
+  filter(Region == 'World')
+
+#Total Carbon Dioxide Emissions
+Emissions_CO <- Emissions_tidy %>%
+  filter(API == 'INTL.4008-8-WORL-MMTCD.A')
+
+Emissions_CO <- Emissions_CO %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Total_Carbon_Dioxide_Emissions')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Emissions_CO, mapping = aes(Year, Total_Carbon_Dioxide_Emissions)) + geom_point() + geom_smooth() + ggtitle('Total Carbon Dioxide (CO2) Emissions - Per Year')
+
+
+
+
+#Total Coal and Coke Emissions
+Emissions_Coal_Coke <- Emissions_tidy %>%
+  filter(API == 'INTL.4002-8-WORL-MMTCD.A')
+
+Emissions_Coal_Coke <- Emissions_Coal_Coke %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Total_Coal_and_Coke')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Emissions_Coal_Coke, mapping = aes(Year, Total_Coal_and_Coke)) + geom_point() + geom_smooth() + ggtitle('Total Coal and Coke Emissions - Per Year')
+  
+
+
+#Total Consumed Natural Gas
+Emissions_Natural_Gas <- Emissions_tidy %>%
+  filter(API == 'INTL.4010-8-WORL-MMTCD.A')
+
+Emissions_Natural_Gas <- Emissions_Natural_Gas %>%
+  select('1980':'2019') %>%
+  pivot_longer('1980':'2019', names_to = 'Year', values_to = 'Consumed_Natural_Gas')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Emissions_Natural_Gas, mapping = aes(Year, Consumed_Natural_Gas)) + geom_point() + geom_smooth() + ggtitle('Total Natural Gas Consumed - per Year')
+
+
+
+#Total Petroleum and Other Liquids
+Emissions_Petro_Liquids <- Emissions_tidy %>%
+  filter(API == 'INTL.4006-8-WORL-MMTCD.A')
+
+Emissions_Petro_Liquids <- Emissions_Petro_Liquids %>%
+  select('1949':'2019') %>%
+  pivot_longer('1949':'2019', names_to = 'Year', values_to = 'Petroleum_and_Other_Liquids')%>%
+  mutate_if(is.character, as.double)
+  
+ggplot(Emissions_Petro_Liquids, mapping = aes(Year, Petroleum_and_Other_Liquids)) + geom_point() + geom_smooth() + ggtitle('Total Petro Liquids Produced - Per Year')
+```
+
+
+
+#Sea Ice
+This dataset containts information on the extent and area of the ice caps in the oceans in the last 40 or so years. Area is the total space of the ice, whereas the extent is the space it spans, covering the entire area, including holes, making it the whole area spanned.
+
+File Loading
+```{r}
+#Extent Northern Hemisphere
+Sea_Ice_NH_EX_file <- "Sea_Ice_NH_Extent.xlsx"
+Sea_Ice_NH_EX <- read_excel(Sea_Ice_NH_EX_file)
+Sea_Ice_NH_EX <- Sea_Ice_NH_EX %>%
+  rename('Year' = 1) %>%
+  select(-14) %>%
+  filter(Year >= 1980)
+
+#Extent Southern Hemisphere
+Sea_Ice_SH_EX_file <- "Sea_Ice_SH_Extent.xlsx"
+Sea_Ice_SH_EX <- read_excel(Sea_Ice_SH_EX_file)
+Sea_Ice_SH_EX <- Sea_Ice_SH_EX %>%
+  rename('Year' = 1) %>%
+  select(-14) %>%
+  filter(Year >= 1980)
+
+#Area Northern Hemisphere
+Sea_Ice_NH_A_file <- "Sea_Ice_NH_Area.xlsx"
+Sea_Ice_NH_A <- read_excel(Sea_Ice_NH_A_file)
+Sea_Ice_NH_A <- Sea_Ice_NH_A %>%
+  rename('Year' = 1) %>%
+  select(-14) %>%
+  filter(Year >= 1980)
+
+#Area Southern Hemisphere
+Sea_Ice_SH_A_file <- "Sea_Ice_SH_Area.xlsx"
+Sea_Ice_SH_A <- read_excel(Sea_Ice_SH_A_file)
+Sea_Ice_SH_A <- Sea_Ice_SH_A %>%
+  rename('Year' = 1) %>%
+  select(-14) %>%
+  filter(Year >= 1980)
+```
+
+Plotting
+```{r}
+#Extent Northern Hemisphere
+ggplot(Sea_Ice_NH_EX, aes(Year, Annual)) + geom_smooth() + geom_point() + ggtitle("Sea Ice Extent - Northern Hemisphere")
+
+#Extent Southern Hemisphere
+ggplot(Sea_Ice_SH_EX, aes(Year, Annual)) + geom_smooth() + geom_point() + ggtitle('Sea Ice Extent - Southern Hemisphere')
+
+
+#Area Northern Hemisphere
+ggplot(Sea_Ice_NH_A, aes(Year, Annual)) + geom_smooth() + geom_point() + ggtitle('Sea Ice Area - Northern Hemisphere')
+
+#Area Southern Hemisphere
+ggplot(Sea_Ice_SH_A, aes(Year, Annual)) + geom_smooth() + geom_point() + ggtitle('Sea Ice Area - Southern Hemisphere')
+
+```
+
+
+
+
+
+
+
+```{r include=FALSE}
+#Climate opinions and beliefs
+climate_change_opinion_file <- "climate_change_opinion_survey_aggregated_06252021.xlsx"
+climate_happening <- read_excel(climate_change_opinion_file, sheet = "climate_happening")
+climate_beliefs <- read_excel(climate_change_opinion_file, sheet = "climate_beliefs")
+
+climate_happening %>% head()
+climate_beliefs %>% head()
+
+glimpse(climate_happening)
+glimpse(climate_beliefs)
+
+
+#Happiness Index
+happy_file <- "WorldHappinessReport2022-Score.csv"
+happy <- read_csv(happy_file)
+happy %>% head()
+```
+
+## Tidying Datasets
+```{r}
+climate_happening %>% 
+  pivot_longer('Argentina':'Vietnam', names_to = "Country", values_to = "Percentage") %>% 
+  pivot_wider(names_from = 'climate_happening', values_from = 'Percentage')
+```
+
+```{r}
+climate_beliefs %>% 
+  pivot_longer('Argentina':'Vietnam', names_to = "Country", values_to = "Percentage") %>% 
+  pivot_wider(names_from = 'climate_beliefs', values_from = 'Percentage')
+```
