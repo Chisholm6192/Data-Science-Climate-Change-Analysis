@@ -1,4 +1,4 @@
-# Data-Science-Climate-Change-Analysis
+# Climate Affects - Data Analysis
 Final Project for my Data Science Class. Using data from the last 40 years for emissions, pollution and icecaps to analyze and come up with a conclusion about the real affects of pollution
 
 
